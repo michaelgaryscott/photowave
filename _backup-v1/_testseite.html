@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Testseite</title>
+<link href="style_test.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<form action="index.php" method="post">
+<table width="200" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="144"><p class="art-box-body art-blockcontent-body"><strong>Login</strong></p></td>
+    <td width="56">&nbsp;</td>
+  </tr>
+  <tr>
+    <td><p class="art-box-body art-blockcontent-body">Benutzername:</p></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><input name="username" type="text" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><p class="art-box-body art-blockcontent-body">Password:</p></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>  <input name="password" type="password" id="password" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><input name="send" type="submit" id="send" value="Senden" /></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<br />
+</form>
+<FORM METHOD="LINK" ACTION="http://google.ch">
+<INPUT TYPE="submit" VALUE="Registrieren">
+</FORM>
+<p>&nbsp;</p>
+<!--Reg Form-->
+<form id="register" name="register" method="post" action="register.php">
+  <table width="380" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td><label for="name">name</label></td>
+      <td><input type="text" name="name" id="name" /></td>
+    </tr>
+    <tr>
+      <td><label for="vorname">vorname</label></td>
+      <td><input type="text" name="vorname" id="vorname" /></td>
+    </tr>
+    <tr>
+      <td><label for="nachname">nachname</label></td>
+      <td><input type="text" name="nachname" id="nachname" /></td>
+    </tr>
+    <tr>
+      <td><label for="email">email</label></td>
+      <td><input type="text" name="email" id="email" /></td>
+    </tr>
+    <tr>
+      <td><label for="passwort">passwort</label></td>
+      <td><input type="text" name="passwort" id="passwort" /></td>
+    </tr>
+    <tr>
+      <td><label for="passwort_repeat">passwort wiederholen</label></td>
+      <td><input type="text" name="passwort_repeat" id="passwort_repeat" /></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><?php
+  require_once('recaptchalib.php');
+  $privatekey = "6Lf-DdESAAAAAJVwR4ne--rniLhtv4MoKDCIF114";
+  $resp = recaptcha_check_answer ($privatekey,
+                                $_SERVER["REMOTE_ADDR"],
+                                $_POST["recaptcha_challenge_field"],
+                                $_POST["recaptcha_response_field"]);
+
+  if (!$resp->is_valid) {
+    // What happens when the CAPTCHA was entered incorrectly
+    die ("The reCAPTCHA wasn't entered correctly. Go back and try it again." .
+         "(reCAPTCHA said: " . $resp->error . ")");
+  } else {
+    // Your code here to handle a successful verification
+  }
+  ?></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</form>
+<p>&nbsp;</p>
+
+
+</body>
+</html>
