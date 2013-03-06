@@ -85,32 +85,7 @@ else
 }
 if(!empty($_POST["send"]))
 {
-	$_db_host = "localhost";            # meist localhost
-	$_db_datenbank = "photowave_prod";
-	$_db_username = "photowave_prod";
-	$_db_passwort = "Bue3vV-phYa!8twT4pOPfBWwW2";
-	
-	// SESSION_START();
-	
-	# Datenbankverbindung herstellen
-	$link = mysql_connect($_db_host, $_db_username, $_db_passwort);
-	
-	# Hat die Verbindung geklappt ?
-	if (!$link)
-		{
-		die("Keine Datenbankverbindung möglich: " . mysql_error());
-		}
-	
-	# Verbindung zur richtigen Datenbank herstellen
-	$datenbank = mysql_select_db($_db_datenbank, $link);
-	
-	if (!$datenbank)
-		{
-		echo "Kann die Datenbank nicht benutzen: " . mysql_error();
-		mysql_close($link);        # Datenbank schliessen
-		exit;                    # Programm beenden !
-		}
-	
+
 	##################################################################
 	
 	# Ist die $_POST Variable submit nicht leer ???
@@ -161,58 +136,57 @@ if(!empty($_POST["send"]))
 		}
 	
 	# Ist der User eingeloggt ???
-	if ($_SESSION["login"] == 0)
+	if ($_SESSION["login"] == 1)
 		{
-		# ist nicht eingeloggt, also Formular anzeigen, die Datenbank
-		# schliessen und das Programm beenden
-		# include("login.php");
-		mysql_close($link);
-		exit;
+		
+				
+				
+			# Hier wäre der User jetzt gültig angemeldet ! Hier kann
+			# Programmcode stehen, den nur eingeloggte User sehen sollen !!
+			$url = $_SERVER['PHP_SELF'];
+			echo '<script type="text/javascript">';
+			echo 'window.location.href="'.$url.'";';
+			echo '</script>';
+			echo '<noscript>';
+			echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+			echo '</noscript>';
+			// echo "Hallo, Sie sind erfolgreich eingeloggt !<br>";
+			
+			##################################################################
+			
+			
+			##################################################################
+			
+			/*
+			$temp = $_SESSION["user"];
+			foreach($temp as $user => $name)
+				echo $name.'<br />';
+			*/
+			
+			# Variablen definieren
+			$temp = $_SESSION["user"];
+			
+			$_SESSION["userid"] = $temp["UserID"];
+			$_SESSION["nachname"] = $temp["Name"];
+			$_SESSION["vorname"] = $temp["Vorname"];
+			$_SESSION["titel"] = $temp["Titel"];
+			$_SESSION["mail"] = $temp["Mail"];
+			$_SESSION["groupid"] = $temp["GroupID"];
+			
+			/*
+			
+			echo 'User: '.$_SESSION["userid"];
+			echo 'Nachname: '.$_SESSION["nachname"];
+			echo 'Vorname: '.$_SESSION["vorname"];
+			echo 'Titel: '.$_SESSION["titel"];
+			echo 'Mail: '.$_SESSION["mail"];
+			echo 'Group: '.$_SESSION["groupid"];
+			*/
+		
+		
+		
 		}
 	
-	# Hier wäre der User jetzt gültig angemeldet ! Hier kann
-	# Programmcode stehen, den nur eingeloggte User sehen sollen !!
-	$url = $_SERVER['PHP_SELF'];
-	echo '<script type="text/javascript">';
-	echo 'window.location.href="'.$url.'";';
-	echo '</script>';
-	echo '<noscript>';
-	echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
-	echo '</noscript>';
-	// echo "Hallo, Sie sind erfolgreich eingeloggt !<br>";
-	
-	##################################################################
-	
-	# Datenbank wieder schliessen
-	mysql_close($link);
-	
-	##################################################################
-	
-	/*
-	$temp = $_SESSION["user"];
-	foreach($temp as $user => $name)
-		echo $name.'<br />';
-	*/
-	
-	# Variablen definieren
-	$temp = $_SESSION["user"];
-	
-	$_SESSION["userid"] = $temp["UserID"];
-	$_SESSION["nachname"] = $temp["Name"];
-	$_SESSION["vorname"] = $temp["Vorname"];
-	$_SESSION["titel"] = $temp["Titel"];
-	$_SESSION["mail"] = $temp["Mail"];
-	$_SESSION["groupid"] = $temp["GroupID"];
-	
-	/*
-	
-	echo 'User: '.$_SESSION["userid"];
-	echo 'Nachname: '.$_SESSION["nachname"];
-	echo 'Vorname: '.$_SESSION["vorname"];
-	echo 'Titel: '.$_SESSION["titel"];
-	echo 'Mail: '.$_SESSION["mail"];
-	echo 'Group: '.$_SESSION["groupid"];
-	*/
 }
 
 echo '
