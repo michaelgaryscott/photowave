@@ -1,6 +1,8 @@
 <?php
-include("includes/header-include.php");
-echo '
+	include 'includes/config.php';
+	$menu_active = 'Home';
+	include 'includes/header-include.php';
+?>
 <div class="cleared reset-box"></div>
 <div class="art-layout-wrapper">
                 <div class="art-content-layout">
@@ -45,9 +47,8 @@ echo '
 
 		<div class="cleared"></div>
     </div>
-</div>';
-
-include("includes/sidebar-include.php");
-include("includes/footer-incude.php");
-
+</div>
+<?php
+	include("includes/sidebar-include.php");
+	include("includes/footer-incude.php");
 ?>
