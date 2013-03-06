@@ -85,7 +85,6 @@ else
 }
 if(!empty($_POST["send"]))
 {
-
 	##################################################################
 	
 	# Ist die $_POST Variable submit nicht leer ???
@@ -106,7 +105,7 @@ if(!empty($_POST["send"]))
 				LIMIT 1";
 	
 		# Prüfen, ob der User in der Datenbank existiert !
-		$_res = mysql_query($_sql, $link);
+		$_res = mysql_query($_sql, $db);
 		$_anzahl = @mysql_num_rows($_res);
 	
 		# Die Anzahl der gefundenen Einträge überprüfen. Maximal
