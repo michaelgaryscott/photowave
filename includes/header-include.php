@@ -53,7 +53,7 @@
 	<ul class="art-hmenu">
 <?php
 	foreach ($menu as $l) {
-		$out .= '
+		echo '
 			<li>
 				<a href="'.$l['link'].'"'.($l['name'] == $menu_active ? ' class="active"' : '').'>'.$l['name'].'</a>
 			</li>';
