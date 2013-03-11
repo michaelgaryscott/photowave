@@ -1,4 +1,5 @@
 <?php
+include 'includes/config.php';
 include("includes/header-include.php");
 echo '
 <div class="cleared reset-box"></div>

@@ -1,7 +1,7 @@
 <?php
 $_db_host		= 'localhost';
 $_db_datenbank	= 'photowave_prod';
-$_db_username	= 'photowave_prod';
+$_db_username	= 'photowave_conect';
 $_db_passwort	= 'Bue3vV-phYa!8twT4pOPfBWwW2';
 
 // SESSION_START();

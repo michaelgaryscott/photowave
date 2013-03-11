@@ -1,6 +1,8 @@
 <?php
 session_start();
-include("includes/header-include.php");
+include 'includes/config.php';
+include 'includes/header-include.php';
+
 echo '
 <div class="cleared reset-box"></div>
 <div class="art-layout-wrapper">
@@ -22,16 +24,18 @@ echo '
 ###############################
 if($_SESSION["groupid"] == 1)
 {
+	/*
 	$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
-	
+	*/
 	
 	$sql = "SELECT u.UserID, u.Name, u.Vorname, u.Titel, u.Mail, u.Password, u.GroupID
 			FROM tblUser AS u
 			ORDER BY Name";
-	
+	/*
 	mysql_select_db('photowave_prod', $db) or die ("Datenbank kann nicht ausgewählt werden");
-							 $ergebnis = mysql_query($sql)
-								or die('Fehler bei der Datenbankabfrage');
+	*/
+							$ergebnis = mysql_query($sql);
+//							or die('Fehler bei der Datenbankabfrage')
 							
 								echo ("<table border=\"0\" width=\"100%\">");
 								echo ("<tr>");
@@ -78,15 +82,17 @@ if($_SESSION["groupid"] == 1)
 								}
 							if(isset($_POST["del"]))
 							{
+								/*
 								$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
-	
+								*/
 	
 									$sql = 'DELETE FROM tblUser 
 											WHERE UserID = "'.$_POST["userid"].'"';
-									
+									/*
 									mysql_select_db('photowave_prod', $db) or die ("Datenbank kann nicht ausgewählt werden");
-															 $ergebnis = mysql_query($sql)
-																or die('Fehler bei der Datenbankabfrage');
+									or die('Fehler bei der Datenbankabfrage');
+									*/
+									$ergebnis = mysql_query($sql);
 									$url = $_SERVER['PHP_SELF'];
 									echo '<script type="text/javascript">';
 									echo 'window.location.href="'.$url.'";';
@@ -98,8 +104,12 @@ if($_SESSION["groupid"] == 1)
 								echo 'Lösche '.$_POST["userid"].'<br />';
 							}
 							echo("<p>"); 
+							/*
 								mysql_close($db);
+							*/
+
 }
+	
 else
 ###############################
 ## Wenn nicht Admin:

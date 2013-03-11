@@ -1,5 +1,6 @@
 <?php
-include("includes/header-include.php");
+include 'includes/config.php';
+include'includes/header-include.php';
 echo '
 <div class="cleared reset-box"></div>
 <div class="art-layout-wrapper">
@@ -154,6 +155,7 @@ if($forward_captcha == 1 and $forward_email == 1 and $forward_nachname == 1 and 
 if ($forward == 1)
 {
 		
+/*
 // Write in DB
 $dbname="photowave_prod"; 
 $dbhost="localhost";
@@ -162,12 +164,12 @@ $dbpass="Bue3vV-phYa!8twT4pOPfBWwW2";
 
 $dbconnection = mysql_connect($dbhost, $dbuser, $dbpass) or die(mysql_error());
 mysql_select_db($dbname,$dbconnection) or die(mysql_error()); 
-
-$title_sql = mysql_real_escape_string($title, $dbconnection);
-$vorname_sql = mysql_real_escape_string($vorname, $dbconnection);
-$nachname_sql = mysql_real_escape_string($nachname, $dbconnection);
-$mail_sql = mysql_real_escape_string($mail, $dbconnection);
-$password_sql = mysql_real_escape_string($password1, $dbconnection);
+*/
+$title_sql = mysql_real_escape_string($title, $db_connection);
+$vorname_sql = mysql_real_escape_string($vorname, $db_connection);
+$nachname_sql = mysql_real_escape_string($nachname, $db_connection);
+$mail_sql = mysql_real_escape_string($mail, $db_connection);
+$password_sql = mysql_real_escape_string($password1, $db_connection);
 
 $query = "
     INSERT INTO
@@ -177,7 +179,7 @@ $query = "
         ('$nachname_sql', '$vorname_sql', '$title_sql', '$mail_sql', md5('$password_sql'), 2)
 ";
 
-mysql_query($query, $dbconnection) or die(mysql_error());
+mysql_query($query, $db_connection) or die(mysql_error());
 $url = "registred_successfully.php";
 echo '<script type="text/javascript">';
 echo 'window.location.href="'.$url.'";';

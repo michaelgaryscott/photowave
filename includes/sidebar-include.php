@@ -1,5 +1,7 @@
 <?php
 
+// include 'includes/db_connection.php';
+
 echo '
  <div class="cleared"></div>
                         </div>
@@ -97,6 +99,8 @@ if(!empty($_POST["send"]))
 		# vorzuziehen !!! Ohne sind mysql injections möglich !!!!
 		$_username = mysql_real_escape_string($_POST["username"]);
 		$_passwort = mysql_real_escape_string(md5($_POST["password"]));
+		echo $_POST["password"];
+		echo $_passwort;
 	
 		# Befehl für die MySQL Datenbank
 		$_sql = "SELECT * FROM tblUser WHERE
@@ -105,8 +109,11 @@ if(!empty($_POST["send"]))
 				LIMIT 1";
 	
 		# Prüfen, ob der User in der Datenbank existiert !
-		$_res = mysql_query($_sql, $db);
+		echo $db.'<br />';
+		$_res = mysql_query($_sql, $db_connection);
+		echo 'resultat: '.$_res.'<br />';
 		$_anzahl = @mysql_num_rows($_res);
+		echo $_anzahl;
 	
 		# Die Anzahl der gefundenen Einträge überprüfen. Maximal
 		# wird 1 Eintrag rausgefiltert (LIMIT 1). Wenn 0 Einträge
@@ -157,6 +164,7 @@ if(!empty($_POST["send"]))
 			##################################################################
 			
 			/*
+			
 			$temp = $_SESSION["user"];
 			foreach($temp as $user => $name)
 				echo $name.'<br />';

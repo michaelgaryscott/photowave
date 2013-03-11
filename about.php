@@ -1,5 +1,8 @@
 <?php
-include("includes/header-include.php");
+	include 'includes/config.php';
+	$menu_active = 'About';
+	include 'includes/header-include.php';
+	
 echo '
 <div class="cleared reset-box"></div>
 <div class="art-layout-wrapper">
@@ -36,7 +39,6 @@ Designtechnisch soll die Webseite schlicht aufgebaut sein. Sie soll aus einem He
     </div>
 </div>';
 
-include("includes/sidebar-include.php");
-include("includes/footer-incude.php");
-
+	include 'includes/sidebar-include.php';
+	include 'includes/footer-incude.php';
 ?>

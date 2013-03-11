@@ -1,5 +1,7 @@
 <?php
-include("includes/header-include.php");
+include 'includes/config.php';
+$menu_active = 'Impressum';
+include 'includes/header-include.php';
 echo '
 <div class="cleared reset-box"></div>
 <div class="art-layout-wrapper">

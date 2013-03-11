@@ -1,6 +1,8 @@
 <?php
-include("includes/header-include.php");
 
+include 'includes/config.php';
+$menu_active = 'Contacts';
+include 'includes/header-include.php';
 
 echo '
 <div class="cleared reset-box"></div>

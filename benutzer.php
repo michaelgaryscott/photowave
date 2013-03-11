@@ -1,5 +1,7 @@
 <?php
-include("includes/header-include.php");
+include 'includes/config.php';
+include 'includes/header-include.php';
+
 echo '
 <div class="cleared reset-box"></div>
 <div class="art-layout-wrapper">
@@ -16,7 +18,7 @@ echo '
     <div class="art-content-layout-row">
     <div class="art-layout-cell layout-item-0" style="width: 100%;">
 
-	
+
         
 ';
 
@@ -33,30 +35,34 @@ if($_SESSION["groupid"] == 1)
 		// Post variabel (UserID) empfangen
 		$id = $_POST["userid"];
 		
+		/*
 		// SQL abfrage
 		$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
-		
+		*/
 		
 		$sql = 'SELECT u.UserID, u.Name, u.Vorname, u.Titel, u.Mail, u.Password, u.GroupID
 				FROM tblUser AS u
 				WHERE UserID = "'.$id.'"';
-		
+		/*
 		mysql_select_db('photowave_prod', $db) or die ("Datenbank kann nicht ausgewählt werden");
-								$ergebnis = mysql_query($sql)
+								
 									or die('Fehler bei der Datenbankabfrage');
-								
-								
-								while ($zeile = mysql_fetch_array($ergebnis)) {
-								$userid = $zeile['UserID'];
-								$nachname = $zeile['Name'];
-								$vorname = $zeile['Vorname'];
-								$titel = $zeile['Titel'];
-								$mail = $zeile['Mail'];
-								$pass = $zeile['Password'];
-								$groupid = $zeile['GroupID'];
-								}
-								
-								mysql_close($db);
+		*/
+		$ergebnis = mysql_query($sql)
+		or die('Fehler bei der Datenbankabfrage');
+		
+		
+		while ($zeile = mysql_fetch_array($ergebnis)) {
+		$userid = $zeile['UserID'];
+		$nachname = $zeile['Name'];
+		$vorname = $zeile['Vorname'];
+		$titel = $zeile['Titel'];
+		$mail = $zeile['Mail'];
+		$pass = $zeile['Password'];
+		$groupid = $zeile['GroupID'];
+		}
+		
+//								mysql_close($db);
 								
 		######################################
 		## Ausgabe und abfüllen der Felder
@@ -136,41 +142,44 @@ if($_SESSION["groupid"] == 1)
 		$groupid = $_POST["groupid"];
 		
 		// Check changed Password
-		
+		/*
 		$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
-	
+		*/
 	
 		$sql = "SELECT u.Password
 				FROM tblUser AS u
 				WHERE UserID = '$userid'";
-	
+		/*
 		mysql_select_db('photowave_prod', $db) or die ("Datenbank kann nicht ausgewählt werden");
+		*/
 							 $ergebnis = mysql_query($sql)
 								or die('Fehler bei der Datenbankabfrage');
 							
 							while ($zeile = mysql_fetch_array($ergebnis)) {
 							$pass_old = $zeile['Password'];
 							}	
-		mysql_close($db);
+//		mysql_close($db);
 		
 		if($password1 != $pass_old)
 			$password1 = md5($password1);
 		
+		/*
 		// Write in DB
 		$dbname="photowave_prod"; 
 		$dbhost="localhost";
 		$dbuser="photowave_prod";
 		$dbpass="Bue3vV-phYa!8twT4pOPfBWwW2"; 
-		
+				
 		$dbconnection = mysql_connect($dbhost, $dbuser, $dbpass) or die(mysql_error());
 		mysql_select_db($dbname,$dbconnection) or die(mysql_error()); 
+		*/
 		
-		$title_sql = mysql_real_escape_string($title, $dbconnection);
-		$vorname_sql = mysql_real_escape_string($vorname, $dbconnection);
-		$nachname_sql = mysql_real_escape_string($nachname, $dbconnection);
-		$mail_sql = mysql_real_escape_string($mail, $dbconnection);
-		$password_sql = mysql_real_escape_string($password1, $dbconnection);
-		$userid_sql = mysql_real_escape_string($userid, $dbconnection);
+		$title_sql = mysql_real_escape_string($title, $db_connection);
+		$vorname_sql = mysql_real_escape_string($vorname, $db_connection);
+		$nachname_sql = mysql_real_escape_string($nachname, $db_connection);
+		$mail_sql = mysql_real_escape_string($mail, $db_connection);
+		$password_sql = mysql_real_escape_string($password1, $db_connection);
+		$userid_sql = mysql_real_escape_string($userid, $db_connection);
 		
 		/*$query2 = "
 			INSERT INTO
@@ -195,7 +204,7 @@ if($_SESSION["groupid"] == 1)
 				WHERE UserID = '$userid'
 				";
 		
-		mysql_query($query, $dbconnection) or die(mysql_error());
+		mysql_query($query, $db_connection) or die(mysql_error());
 		echo '<br /><b>Data updated successfully!</b><br />';
 
 	}
