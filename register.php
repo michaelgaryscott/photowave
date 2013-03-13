@@ -24,7 +24,7 @@ $vorname = $_POST["vorname"];
 $nachname = $_POST["nachname"];
 $geburtsdatum = $_POST["geburtsdatum"];
 $mail = $_POST["email"];
-$showname= $_POST["showname"]
+$showname = $_POST["showname"];
 $password1 = $_POST["passwort"];
 $password2 = $_POST["passwort_repeat"];
 $forward = 0;
@@ -75,7 +75,7 @@ echo '
     </tr>
 	<tr>
       <td><label for="geburtsdatum">geburtsdatum</label></td>
-      <td><input type="number" name="geburtsdatum" id="geburtsdatum"'.$return_geurtsdatum.' /></td>
+      <td><input type="date" name="geburtsdatum" id="geburtsdatum"'.$return_geburtsdatum.' /></td>
     </tr>
 	<tr>
       <td><label for="showname">showname</label></td>
@@ -171,7 +171,7 @@ echo '
 	  echo '</b></font>';
   }
 // Forwarding definieren
-if($forward_captcha == 1 and $forward_email == 1 and $forward_nachname == 1 and $forward_pass1 == 1 and $forward_pass2 == 1 and $forward_pass3 == 1 and $forward_vorname == 1)
+if($forward_captcha == 1 and $forward_email == 1 and $forward_nachname == 1 and $forward_pass1 == 1 and $forward_pass2 == 1 and $forward_pass3 == 1 and $forward_vorname == 1 and $forward_showname == 1 and $forwar_geburtsdatum == 1)
 {
 	$forward = 1;
 }
@@ -203,7 +203,7 @@ $query = "
         tblUser
         (name, vorname, titel, mail, password, groupid, geburtsdatum, showname)
     VALUES
-        ('$nachname_sql', '$vorname_sql', '$title_sql', '$mail_sql', md5('$password_sql'), '$geburtsdatum', '$showname', 2)
+        ('$nachname_sql', '$vorname_sql', '$title_sql', '$mail_sql', md5('$password_sql'), 2, '$geburtsdatum', '$showname')
 ";
 
 mysql_query($query, $db_connection) or die(mysql_error());
