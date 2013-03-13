@@ -22,7 +22,9 @@ error_reporting(0);
 $title = $_POST["title"];
 $vorname = $_POST["vorname"];
 $nachname = $_POST["nachname"];
+$geburtsdatum = $_POST["geburtsdatum"];
 $mail = $_POST["email"];
+$showname= $_POST["showname"]
 $password1 = $_POST["passwort"];
 $password2 = $_POST["passwort_repeat"];
 $forward = 0;
@@ -34,6 +36,8 @@ $forward_pass1 = 0;
 $forward_pass2 = 0;
 $forward_pass3 = 0;
 $forward_captcha = 0;
+$forward_geburtsdatum = 0;
+$forward_showname = 0;
 
 if(!empty($vorname))
 	$return_vorname = ' value="'.$vorname.'"';
@@ -41,6 +45,10 @@ if(!empty($nachname))
 	$return_nachname = ' value="'.$nachname.'"';
 if(!empty($mail))
 	$return_mail = ' value="'.$mail.'"';
+if(!empty($geburtsdatum))
+	$return_geburtsdatum = ' value="'.$geburtsdatum.'"';
+if(!empty($showname))
+	$return_showname = ' value="'.$showname.'"';
   
 
 echo '
@@ -64,6 +72,14 @@ echo '
     <tr>
       <td><label for="email">email</label></td>
       <td><input type="text" name="email" id="email"'.$return_mail.' /></td>
+    </tr>
+	<tr>
+      <td><label for="geburtsdatum">geburtsdatum</label></td>
+      <td><input type="number" name="geburtsdatum" id="geburtsdatum"'.$return_geurtsdatum.' /></td>
+    </tr>
+	<tr>
+      <td><label for="showname">showname</label></td>
+      <td><input type="text" name="showname" id="showname"'.$return_showname.' /></td>
     </tr>
     <tr>
       <td><label for="passwort">passwort</label></td>
@@ -130,6 +146,14 @@ echo '
 		echo 'Mail Adresse fehlt oder ist ungültig!<br />';
 	  else
 		$forward_email = 1;
+	  if(empty($geburtsdatum))
+		echo 'Geburtdatum fehlt.<br />';
+	  else
+		$forward_geburtsdatum = 1;
+	  if(empty($showname))
+		echo 'Showname fehlt.<br />';
+	  else
+		$forward_showname = 1;
 	  if(empty($password1))
 		echo 'Password 1 fehlt.<br />';
 	  else
@@ -169,14 +193,17 @@ $title_sql = mysql_real_escape_string($title, $db_connection);
 $vorname_sql = mysql_real_escape_string($vorname, $db_connection);
 $nachname_sql = mysql_real_escape_string($nachname, $db_connection);
 $mail_sql = mysql_real_escape_string($mail, $db_connection);
+$geburtsdatum_sql = mysql_real_escape_string($geburtsdatum, $db_connection);
+$showname_sql = mysql_real_escape_string($showname, $db_connection);
 $password_sql = mysql_real_escape_string($password1, $db_connection);
+
 
 $query = "
     INSERT INTO
         tblUser
-        (name, vorname, titel, mail, password, groupid)
+        (name, vorname, titel, mail, password, groupid, geburtsdatum, showname)
     VALUES
-        ('$nachname_sql', '$vorname_sql', '$title_sql', '$mail_sql', md5('$password_sql'), 2)
+        ('$nachname_sql', '$vorname_sql', '$title_sql', '$mail_sql', md5('$password_sql'), '$geburtsdatum', '$showname', 2)
 ";
 
 mysql_query($query, $db_connection) or die(mysql_error());
