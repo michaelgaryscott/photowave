@@ -40,7 +40,7 @@ if($_SESSION["groupid"] == 1)
 		$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
 		*/
 		
-		$sql = 'SELECT u.UserID, u.Name, u.Vorname, u.Titel, u.Mail, u.Password, u.GroupID
+		$sql = 'SELECT u.UserID, u.Name, u.Vorname, u.Titel, u.Mail, u.Password, u.GroupID, u.Geburtsdatum, u.Showname
 				FROM tblUser AS u
 				WHERE UserID = "'.$id.'"';
 		/*
@@ -53,13 +53,15 @@ if($_SESSION["groupid"] == 1)
 		
 		
 		while ($zeile = mysql_fetch_array($ergebnis)) {
-		$userid = $zeile['UserID'];
-		$nachname = $zeile['Name'];
-		$vorname = $zeile['Vorname'];
-		$titel = $zeile['Titel'];
-		$mail = $zeile['Mail'];
-		$pass = $zeile['Password'];
-		$groupid = $zeile['GroupID'];
+							$userid = $zeile['UserID'];
+							$nachname = $zeile['Name'];
+							$vorname = $zeile['Vorname'];
+							$titel = $zeile['Titel'];
+							$mail = $zeile['Mail'];
+							$pass = $zeile['Password'];
+							$groupid = $zeile['GroupID'];
+							$geburtsdatum = $zeile['Geburtsdatum'];
+							$showname = $zeile['Showname'];
 		}
 		
 //								mysql_close($db);
@@ -76,6 +78,12 @@ if($_SESSION["groupid"] == 1)
 			$mail_return = ' value="'.$mail.'"';
 		if(!empty($pass))
 			$pass_return = ' value="'.$pass.'"';
+		if(!empty($geburtsdatum))
+			$geburtsdatum_return = ' value="'.$geburtsdatum.'"';
+		if(!empty($showname))
+			$showname_return = ' value="'.$showname.'"';
+			
+		
 			
 			
 		echo '
@@ -100,6 +108,14 @@ if($_SESSION["groupid"] == 1)
 			<tr>
 			  <td><label for="email">email</label></td>
 			  <td><input type="text" name="email" id="email"'.$mail_return.' /></td>
+			</tr>
+			<tr>
+			  <td><label for="geburtsdatum">geburtsdatum</label></td>
+			  <td><input type="date" name="geburtsdatum" id="geburtsdatum"'.$geburtsdatum_return.' /></td>
+			</tr>
+			<tr>
+			  <td><label for="showname">showname</label></td>
+			  <td><input type="text" name="showname" id="showname"'.$showname_return.' /></td>
 			</tr>
 			<tr>
 			  <td><label for="passwort">passwort</label></td>
@@ -138,6 +154,8 @@ if($_SESSION["groupid"] == 1)
 		$vorname = $_POST["vorname"];
 		$nachname = $_POST["nachname"];
 		$mail = $_POST["email"];
+		$geburtsdatum = $_POST["geburtsdatum"];
+		$showname = $_POST["showname"];
 		$password1 = $_POST["passwort"];
 		$groupid = $_POST["groupid"];
 		
@@ -178,6 +196,8 @@ if($_SESSION["groupid"] == 1)
 		$vorname_sql = mysql_real_escape_string($vorname, $db_connection);
 		$nachname_sql = mysql_real_escape_string($nachname, $db_connection);
 		$mail_sql = mysql_real_escape_string($mail, $db_connection);
+		$geburtsdatum_sql = mysql_real_escape_string($geburtsdatum, $db_connection);
+		$showname_sql = mysql_real_escape_string($showname, $db_connection);
 		$password_sql = mysql_real_escape_string($password1, $db_connection);
 		$userid_sql = mysql_real_escape_string($userid, $db_connection);
 		
@@ -199,6 +219,8 @@ if($_SESSION["groupid"] == 1)
 					Vorname = '$vorname_sql',
 					Titel = '$title_sql',
 					Mail = '$mail_sql',
+					Geburtsdatum = '$geburtsdatum_sql',
+					Showname = '$showname_sql',
 					Password = '$password_sql',
 					GroupID = '$groupid'
 				WHERE UserID = '$userid'

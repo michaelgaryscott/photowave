@@ -28,7 +28,7 @@ if($_SESSION["groupid"] == 1)
 	$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
 	*/
 	
-	$sql = "SELECT u.UserID, u.Name, u.Vorname, u.Titel, u.Mail, u.Password, u.GroupID
+	$sql = "SELECT u.UserID, u.Name, u.Vorname, u.Titel, u.Mail, u.Password, u.GroupID, u.Geburtsdatum, u.Showname
 			FROM tblUser AS u
 			ORDER BY Name";
 	/*
@@ -43,6 +43,7 @@ if($_SESSION["groupid"] == 1)
 								echo ('<td width="170"><b>Benutzer</b></td>');		
 								echo ('<td width="230"><b>Mail</b></td>');
 								echo ('<td width="60"><b>GroupID</b></td>');
+								echo ('<td width="60"><b>Showname</b></td>');
 								echo ('<td width="55"><b>Delete</b></td>');
 								echo ('<td width="55"><b>Bearbeiten</b></td>');
 								echo ("</tr>");		
@@ -55,12 +56,16 @@ if($_SESSION["groupid"] == 1)
 							$mail = $zeile['Mail'];
 							$pass = $zeile['Password'];
 							$groupid = $zeile['GroupID'];
+							$geburtsdatum = $zeile['Geburtsdatum'];
+							$showname = $zeile['Showname'];
+							
 											
 							echo ("<tr>");			
 							echo ("<td>$userid</td>");
 							echo ("<td>$nachname, $vorname</td>");
 							echo ("<td>$mail</td>");
 							echo ("<td>$groupid</td>");
+							echo ("<td>$showname</td>");
 							echo ('<td><div>
 							<form action="'.$_SERVER['PHP_SELF'].'" method="POST" name="user">
 							<input type="submit" name="del" value="del">
