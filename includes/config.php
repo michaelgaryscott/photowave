@@ -26,4 +26,8 @@ $menu = array(
 		'name'	=> 'Impressum',
 		'link'	=> './impressum.php'
 	),
+	array(
+		'name'	=> 'Photostream',
+		'link'	=> './photostream.php'
+	),
 );
