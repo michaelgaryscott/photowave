@@ -158,6 +158,8 @@ pip-log.txt
 
 #Eigene
 *.jpg
+*.png
+*.giv
 
 #Mr Developer
 .mr.developer.cfg
