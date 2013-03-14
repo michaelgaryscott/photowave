@@ -160,6 +160,7 @@ pip-log.txt
 *.jpg
 *.png
 *.giv
+*.jpeg
 
 #Mr Developer
 .mr.developer.cfg
