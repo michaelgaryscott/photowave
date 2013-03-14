@@ -19,15 +19,15 @@ $menu = array(
 		'link'	=> './contact.php'
 	),
 	array(
-		'name'	=> 'Gästebuch',
-		'link'	=> './guestbook.php'
-	),
-	array(
 		'name'	=> 'Impressum',
 		'link'	=> './impressum.php'
 	),
 	array(
 		'name'	=> 'Photostream',
 		'link'	=> './photostream.php'
+	),
+		array(
+		'name'	=> 'Freunde Finden',
+		'link'	=> './user_overview.php'
 	),
 );

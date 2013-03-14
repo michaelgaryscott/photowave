@@ -1,0 +1,11 @@
+		$userid_sql = mysql_real_escape_string($_SESSION["userid"], $db_connection);
+		$friendid_sql = mysql_real_escape_string($friendid0, $db_connection);
+		
+		$query_follow = "
+    INSERT INTO
+        tblfollow
+        (userid, friendid)
+    VALUES
+        ('$userid_sql', '$friendid_sql')
+		
+				mysql_query($query_follow, $db_connection) or die(mysql_error());

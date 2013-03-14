@@ -27,10 +27,14 @@ if(!empty($logout))
 	
 if(isset($_SESSION["userid"]))
 {
-	echo 'Willkommen '.$_SESSION["vorname"].'.<br />';
+	echo 'Willkommen '.$_SESSION["showname"].'.<br />';
 		if($_SESSION["groupid"] == 1)
 		{
 			echo '<br /><a href="benutzerverwaltung.php">Benutzerverwaltung</a><br />';
+		}
+		if($_SESSION["groupid"] == 2)
+		{
+			echo '<br /><a href="benutzer.php">Profil bearbeiten</a><br />';
 		}
 	echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post"><br />
 		  <input name="logout" type="submit" id="logout" value="Logout" />
@@ -99,8 +103,8 @@ if(!empty($_POST["send"]))
 		# vorzuziehen !!! Ohne sind mysql injections möglich !!!!
 		$_username = mysql_real_escape_string($_POST["username"]);
 		$_passwort = mysql_real_escape_string(md5($_POST["password"]));
-		echo $_POST["password"];
-		echo $_passwort;
+		
+		
 	
 		# Befehl für die MySQL Datenbank
 		$_sql = "SELECT * FROM tblUser WHERE
@@ -109,11 +113,9 @@ if(!empty($_POST["send"]))
 				LIMIT 1";
 	
 		# Prüfen, ob der User in der Datenbank existiert !
-		echo $db.'<br />';
 		$_res = mysql_query($_sql, $db_connection);
-		echo 'resultat: '.$_res.'<br />';
 		$_anzahl = @mysql_num_rows($_res);
-		echo $_anzahl;
+		
 	
 		# Die Anzahl der gefundenen Einträge überprüfen. Maximal
 		# wird 1 Eintrag rausgefiltert (LIMIT 1). Wenn 0 Einträge
@@ -179,6 +181,8 @@ if(!empty($_POST["send"]))
 			$_SESSION["titel"] = $temp["Titel"];
 			$_SESSION["mail"] = $temp["Mail"];
 			$_SESSION["groupid"] = $temp["GroupID"];
+			$_SESSION["geburtsdatum"] = $temp["Geburtsdatum"];
+			$_SESSION["showname"] = $temp["Showname"];
 			
 			/*
 			

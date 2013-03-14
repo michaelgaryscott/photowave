@@ -363,13 +363,9 @@ elseif($_SESSION["groupid"] == 2)
 		$geburtsdatum = $_POST["geburtsdatum"];
 		$showname = $_POST["showname"];
 		$password1 = $_POST["passwort"];
-		$groupid = $_POST["groupid"];
+		$groupid = $_SESSION["groupid"];
 		
 		// Check changed Password
-		/*
-		$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
-		*/
-	
 		$sql = "SELECT u.Password
 				FROM tblUser AS u
 				WHERE UserID = '$userid'";
@@ -387,16 +383,7 @@ elseif($_SESSION["groupid"] == 2)
 		if($password1 != $pass_old)
 			$password1 = md5($password1);
 		
-		/*
-		// Write in DB
-		$dbname="photowave_prod"; 
-		$dbhost="localhost";
-		$dbuser="photowave_prod";
-		$dbpass="Bue3vV-phYa!8twT4pOPfBWwW2"; 
-				
-		$dbconnection = mysql_connect($dbhost, $dbuser, $dbpass) or die(mysql_error());
-		mysql_select_db($dbname,$dbconnection) or die(mysql_error()); 
-		*/
+// Write in DB
 		
 		$title_sql = mysql_real_escape_string($title, $db_connection);
 		$vorname_sql = mysql_real_escape_string($vorname, $db_connection);
