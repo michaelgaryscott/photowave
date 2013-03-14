@@ -171,7 +171,7 @@ echo '
 	  echo '</b></font>';
   }
 // Forwarding definieren
-if($forward_captcha == 1 and $forward_email == 1 and $forward_nachname == 1 and $forward_pass1 == 1 and $forward_pass2 == 1 and $forward_pass3 == 1 and $forward_vorname == 1 and $forward_showname == 1 and $forwar_geburtsdatum == 1)
+if($forward_captcha == 1 and $forward_email == 1 and $forward_nachname == 1 and $forward_pass1 == 1 and $forward_pass2 == 1 and $forward_pass3 == 1 and $forward_vorname == 1 and $forward_showname == 1 and $forward_geburtsdatum == 1)
 {
 	$forward = 1;
 }
