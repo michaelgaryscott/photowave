@@ -124,6 +124,34 @@ if(isset($_SESSION["userid"]))
 			</div>
 			</div>
 			</div>';
+			
+	$sql = 	'SELECT u.UserID, u.FriendID
+			FROM tblfollow as u
+			WHERE u.UserID = "'.$_SESSION["userid"].'"';
+		
+
+	$ergebnis = mysql_query($sql);
+						 	
+	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
+        
+	while ($zeile = mysql_fetch_array($ergebnis)) {
+	$friendid = $zeile['FriendID'];
+	
+		$sql2 =' 	SELECT f.UserID, f.FotoPath
+					FROM tblfoto as f
+					WHERE f.UserID = "'.$friendid.'"';
+					
+					$ergebnis2 = mysql_query($sql2);
+					while ($zeile2 = mysql_fetch_array($ergebnis2)){
+						$fotopath = $zeile2['FotoPath'];
+						echo '<tr>';
+						echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
+						echo '</tr>';
+						
+					}
+	}
+	
+	echo '</table>';
 }
 else
 	echo 'Sie sind nicht berechtigt diese Seite zu sehen.';
