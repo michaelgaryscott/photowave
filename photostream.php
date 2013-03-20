@@ -33,7 +33,7 @@ if(isset($_SESSION["userid"]))
 	while ($zeile = mysql_fetch_array($ergebnis)) {
 	$fotopath = $zeile['FotoPath'];
 	
-	$sql2=' SELECT x.FotoPath, x.UserID. x.Datum, y.UserID, y.Showname
+	$sql2=' SELECT x.FotoPath, x.UserID, x.Datum, y.UserID, y.Showname
 			FROM tblfoto as x INNER JOIN tbluser as y ON x.UserID = y.UserID
 			WHERE x.FotoPath = "'.$fotopath.'"';
 			
@@ -41,11 +41,12 @@ if(isset($_SESSION["userid"]))
 	while ($zeile2 = mysql_fetch_array($ergebnis2)) {
 	
 	$showname = $zeile2['Showname'];
+	$posttime = $zeile2['Datum'];
 						echo '<tr>';
 						echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
 						echo '</tr>';
 						echo '<tr>';
-						echo '<td align="center">Postet by '.$showname.'  </td>';
+						echo '<td align="center">Postet by '.$showname.' at '.$posttime.'  </td>';
 						echo '</tr>';
 						}
 					}
