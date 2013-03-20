@@ -2,112 +2,8 @@
 
 include 'includes/config.php';
 $menu_active = 'Photostream';
-?>
-<!-- HEADER - BEGIN -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"[]>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!--[if IE 9]><META http-equiv="refresh" content="0; URL=./wrong_browser.html"><![endif]-->
-	<!--[if IE 8]><META http-equiv="refresh" content="0; URL=./wrong_browser.html"><![endif]-->
-	<!--[if IE 7]><META http-equiv="refresh" content="0; URL=./wrong_browser.html"><![endif]-->
-	<!--[if IE 6]><META http-equiv="refresh" content="0; URL=./wrong_browser.html"><![endif]-->
-    <title>Guestbook - Adrian Sameli</title>
-
-
-
-    <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
-    <!--[if IE 6]><link rel="stylesheet" href="style.ie6.css" type="text/css" media="screen" /><![endif]-->
-    <!--[if IE 7]><link rel="stylesheet" href="style.ie7.css" type="text/css" media="screen" /><![endif]-->
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="script.js"></script>
-   <style type="text/css">
-.art-post .layout-item-0 { padding-right: 10px;padding-left: 10px; }
-   .ie7 .art-post .art-layout-cell {border:none !important; padding:0 !important; }
-   .ie6 .art-post .art-layout-cell {border:none !important; padding:0 !important; }
-   </style>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
-		<script type="text/javascript" src="js/jquery.form.js"></script>
-		 <script>
-				$(document).ready(function() {
-					$(\'#UploadForm\').on(\'submit\', function(e) {
-						e.preventDefault();
-						$(\'#SubmitButton\').attr(\'disabled\', \'\'); // disable upload button
-						//show uploading message
-						$("#output").html(\'<div style="padding:10px"><img src="images/ajax-loader.gif" alt="Please Wait"/> <span>Uploading...</span></div>\');
-						$(this).ajaxSubmit({
-							target: \'#output\',
-							success:  afterSuccess //call function after success
-						});
-					});
-				});
-				function afterSuccess()  {
-					$(\'#UploadForm\').resetForm();  // reset form
-					$(\'#SubmitButton\').removeAttr(\'disabled\'); //enable submit button
-				}
-			</script>
-		 <link href="style/style.css" rel="stylesheet" type="text/css" />
-   
-   
-</head>
-<body>
-<!--[if IE 9]><h1>Please use another Browser!</h1><![endif]-->
-<div id="art-main">
-    <div class="cleared reset-box"></div>
-    <div id="art-hmenu-bg" class="art-bar art-nav">
-    </div>
-    <div class="cleared reset-box"></div>
-    <div class="art-header">
-        <div class="art-header-position">
-            <div class="art-header-wrapper">
-                <div class="cleared reset-box"></div>
-                <div class="art-header-inner">
-                <div class="art-logo">
-                                 <h1 class="art-logo-name">Photowave</h1>
-                                                 <h2 class="art-logo-text">Modul 141 - Projekt Adrian Sameli & Fabio Colbrelli</h2>
-                                </div>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-    <div class="cleared reset-box"></div>
-    <div class="art-box art-sheet">
-        <div class="art-box-body art-sheet-body">
-<div class="art-bar art-nav">
-<div class="art-nav-outer">
-	<ul class="art-hmenu">
-<?php
-	foreach ($menu as $l) {
-		echo '
-			<li>
-				<a href="'.$l['link'].'"'.($l['name'] == $menu_active ? ' class="active"' : '').'>'.$l['name'].'</a>
-			</li>';
-	}
-?>
-	</ul>
-</div>
-</div>
-<!-- HEADER - END -->
-<?php
-
-echo '
-<div class="cleared reset-box"></div>
-<div class="art-layout-wrapper">
-                <div class="art-content-layout">
-                    <div class="art-content-layout-row">
-                        <div class="art-layout-cell art-content">
-<div class="art-box art-post">
-    <div class="art-box-body art-post-body">
-<div class="art-post-inner art-article">
-                                <h2 class="art-postheader">Photostream
-                                </h2>
-                                                <div class="art-postcontent">
-<div class="art-content-layout">
-    <div class="art-content-layout-row">
-    <div class="art-layout-cell layout-item-0" style="width: 100%;">';
-
+$title = 'Photostream';
+include 'includes/header-include.php';
 
 if(isset($_SESSION["userid"]))
 {
@@ -124,8 +20,39 @@ if(isset($_SESSION["userid"]))
 			</div>
 			</div>
 			</div>';
+	
+	$sql=' SELECT u.UserID, u.FriendID, f.UserID, f.FotoPath, f.Datum
+			FROM tblfollow as u INNER JOIN tblfoto as f ON u.FriendID = f.UserID
+			WHERE u.UserID = "'.$_SESSION["userid"].'"
+			ORDER by f.Datum';
 			
-	$sql = 	'SELECT u.UserID, u.FriendID
+	$ergebnis = mysql_query($sql);
+	
+	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
+	
+	while ($zeile = mysql_fetch_array($ergebnis)) {
+	$fotopath = $zeile['FotoPath'];
+	
+	$sql2=' SELECT x.FotoPath, x.UserID. x.Datum, y.UserID, y.Showname
+			FROM tblfoto as x INNER JOIN tbluser as y ON x.UserID = y.UserID
+			WHERE x.FotoPath = "'.$fotopath.'"';
+			
+	$ergebnis2 = mysql_query($sql2);		
+	while ($zeile2 = mysql_fetch_array($ergebnis2)) {
+	
+	$showname = $zeile2['Showname'];
+						echo '<tr>';
+						echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
+						echo '</tr>';
+						echo '<tr>';
+						echo '<td align="center">Postet by '.$showname.'  </td>';
+						echo '</tr>';
+						}
+					}
+	echo '</table>';
+}	
+						
+	/*$sql = 	'SELECT u.UserID, u.FriendID
 			FROM tblfollow as u
 			WHERE u.UserID = "'.$_SESSION["userid"].'"';
 		
@@ -137,9 +64,10 @@ if(isset($_SESSION["userid"]))
 	while ($zeile = mysql_fetch_array($ergebnis)) {
 	$friendid = $zeile['FriendID'];
 	
-		$sql2 =' 	SELECT f.UserID, f.FotoPath
+		$sql2 =' 	SELECT f.UserID, f.FotoPath, f.Datum
 					FROM tblfoto as f
-					WHERE f.UserID = "'.$friendid.'"';
+					WHERE f.UserID = "'.$friendid.'"
+					ORDER BY f.Datum';
 					
 					$ergebnis2 = mysql_query($sql2);
 					while ($zeile2 = mysql_fetch_array($ergebnis2)){
@@ -148,28 +76,14 @@ if(isset($_SESSION["userid"]))
 						echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
 						echo '</tr>';
 						
-					}
+				}
 	}
 	
 	echo '</table>';
-}
-else
+}*/	else {
 	echo 'Sie sind nicht berechtigt diese Seite zu sehen.';
-	
+}
 
-
-echo'
-    </div>
-    </div>
-</div>
-
-                </div>
-                <div class="cleared"></div>
-                </div>
-
-		<div class="cleared"></div>
-    </div>
-</div>';
 
 include("includes/sidebar-include.php");
 include("includes/footer-incude.php");

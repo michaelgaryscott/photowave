@@ -1,46 +1,74 @@
 <?php
 include 'includes/config.php';
-$menu_active = 'Dummy';
+$menu_active = '';
+$title = 'Photoverwaltung';
 include 'includes/header-include.php';
-	
-echo '
-<div class="cleared reset-box"></div>
-<div class="art-layout-wrapper">
-                <div class="art-content-layout">
-                    <div class="art-content-layout-row">
-                        <div class="art-layout-cell art-content">
-<div class="art-box art-post">
-    <div class="art-box-body art-post-body">
-<div class="art-post-inner art-article">
-                                <h2 class="art-postheader">Dummy
-                                </h2>
-                                                <div class="art-postcontent">
-<div class="art-content-layout">
-    <div class="art-content-layout-row">
-    <div class="art-layout-cell layout-item-0" style="width: 100%;">
-        <p>';
 ############################
 ######## Main Part #########
 ############################
 
+if(isset($_SESSION["userid"])) {
 
+	// Löschen eines Fotos
+	if (isset($_POST['remove_foto'])) {
+		
+		// Check gibt es "FOTO"?
+		$sql = 	'
+			SELECT *
+			FROM tblfoto
+			WHERE
+				FotoID = "'.mysql_real_escape_string($_POST['id']).'"
+		';
+		$foto_sql = mysql_query($sql);
+		
+		if ($foto = mysql_fetch_array($foto_sql)) {
+			
+			// Foto löschen HD
+			unlink('./uploads/'.$foto['FotoName']);
+			unlink('./uploads/thumb_'.$foto['FotoName']);
+			
+			// Foto löschen DB
+			$sql = '
+				DELETE
+				FROM tblfoto 
+				WHERE
+					FotoID = "'.mysql_real_escape_string($_POST['id']).'"
+			';
+			mysql_query($sql);
+		}
+	}
+	
+	// Main Part
+	$sql = 	'
+		SELECT *
+		FROM tblfoto
+		WHERE
+			UserID = "'.$_SESSION["userid"].'"
+	';
+	
+	$ergebnis = mysql_query($sql);
+	$anzahl = @mysql_num_rows($ergebnis);
+	if ($anzahl > 0) {
+		while ($zeile = mysql_fetch_array($ergebnis)) {
+			echo '
+			<div>
+				<form action="" method="post">
+					<input type="hidden" name="id" value="'.$zeile['FotoID'].'" />
+					<img src="uploads/thumb_'.$zeile['FotoName'].'" alt="Thumbnail">
+					<input type="submit" name="remove_foto" value="Foto löschen" />
+				</form>
+			</div>';
+		}
+	} else {
+		echo '<p>Du hast keine Fotos</p>';
+	}
+} else {
+	echo 'Sie sind nicht berechtigt diese Seite zu sehen.';
+}
 
 ############################
 ########### End ############
 ############################
-echo'
-    </div>
-    </div>
-</div>
-
-                </div>
-                <div class="cleared"></div>
-                </div>
-
-		<div class="cleared"></div>
-    </div>
-</div>';
-
 include 'includes/sidebar-include.php';
 include 'includes/footer-incude.php';
 ?>
