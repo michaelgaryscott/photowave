@@ -37,13 +37,14 @@ if(isset($_SESSION["userid"]))
 
 
 	$ergebnis = mysql_query($sql_list) or die(mysql_error());
-
+	
+	// Auflistung aller Benutzer, ausser dem eigenen
 	echo ("<table border=\"0\" width=\"100%\">");
 	echo ("<tr>");
 	echo ('<td width="60"><b>UserID</b></td>');
 	echo ('<td width="170"><b>Benutzer</b></td>');		
 	echo ('<td width="230"><b>Mail</b></td>');
-	echo ('<td width="60"><b>GroupID</b></td>');
+//	echo ('<td width="60"><b>GroupID</b></td>');
 	echo ('<td width="60"><b>Showname</b></td>');
 	echo ('<td width="55"><b>Follow</b></td>');
 	echo ("</tr>");		
@@ -61,9 +62,9 @@ if(isset($_SESSION["userid"]))
 		$showname = $zeile['Showname'];
 
 		$sql_follower = "SELECT * FROM tblfollow WHERE
-				UserID='$userid_self' AND
-				FriendID='$userid'
-				LIMIT 1";
+						UserID='$userid_self' AND
+						FriendID='$userid'
+						LIMIT 1";
 				
 		
 		// Prüfen, ob der User in der Datenbank existiert !
@@ -75,7 +76,7 @@ if(isset($_SESSION["userid"]))
 		echo ("<td>$userid</td>");
 		echo ("<td>$nachname, $vorname</td>");
 		echo ("<td>$mail</td>");
-		echo ("<td>$groupid</td>");
+//		echo ("<td>$groupid</td>");
 		echo ("<td>$showname</td>");
 		if ($_anzahl > 0)
 		{
