@@ -24,7 +24,7 @@ if(isset($_SESSION["userid"]))
 	$sql=' SELECT u.UserID, u.FriendID, f.UserID, f.FotoPath, f.Datum
 			FROM tblfollow as u INNER JOIN tblfoto as f ON u.FriendID = f.UserID
 			WHERE u.UserID = "'.$_SESSION["userid"].'"
-			ORDER by f.Datum';
+			ORDER by f.Datum DESC';
 			
 	$ergebnis = mysql_query($sql);
 	
