@@ -41,7 +41,7 @@ if(isset($_SESSION["userid"]))
 	while ($zeile2 = mysql_fetch_array($ergebnis2)) {
 	
 	$showname = $zeile2['Showname'];
-	$posttime = $zeile2['Datum'];
+	$posttime = date("d.m.Y",$zeile2['Datum']);
 						echo '<tr>';
 						echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
 						echo '</tr>';

@@ -182,16 +182,43 @@ $geburtsdatum_sql = mysql_real_escape_string($geburtsdatum, $db_connection);
 $showname_sql = mysql_real_escape_string($showname, $db_connection);
 $password_sql = mysql_real_escape_string($password1, $db_connection);
 
+$userid = $_SESSION["userid"];
 
 $query = "
     INSERT INTO
         tblUser
         (name, vorname, titel, mail, password, groupid, geburtsdatum, showname)
     VALUES
-        ('$nachname_sql', '$vorname_sql', '$title_sql', '$mail_sql', md5('$password_sql'), 2, '$geburtsdatum', '$showname')
+        ('$nachname_sql', '$vorname_sql', '$title_sql', '$mail_sql', md5('$password_sql'), 2, '$geburtsdatum_sql', '$showname_sql')
 ";
 
+$query_2 = "
+	SELECT u.UserID, u.Showname
+	FROM tbluser as u
+	WHERE u.Showname = '$showname_sql'
+";
+
+
 mysql_query($query, $db_connection) or die(mysql_error());
+
+$ergebnis = mysql_query($query_2, $db_connection) or die(mysql_error());		
+	while ($zeile2 = mysql_fetch_array($ergebnis)) {
+	
+	$userid_new = $zeile2['UserID'];
+	
+	$query_post = "
+	INSERT INTO
+		tblfollow
+		(UserID, FriendID)
+	VALUES
+		('$userid_new', '$userid_new')
+	";
+	
+	mysql_query($query_post, $db_connection) or die(mysql_error());
+
+}
+
+
 $url = "registred_successfully.php";
 echo '<script type="text/javascript">';
 echo 'window.location.href="'.$url.'";';
