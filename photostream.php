@@ -4,17 +4,20 @@ include 'includes/config.php';
 $menu_active = 'Photostream';
 $title = 'Photostream';
 include 'includes/header-include.php';
-
 if(isset($_SESSION["userid"]))
 {
 	
 	// Main Part
+	
+	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
+	
 	echo '	<div><br />
 			<div id="Wrapper">
 			<div align="left">
 			<form action="processupload.php" method="post" enctype="multipart/form-data" id="UploadForm">
-			<input name="ImageFile" type="file" />
-			<input type="submit"  id="SubmitButton" value="Upload" />
+			<tr>
+			<td align="center"><input name="ImageFile" type="file" /> <input type="submit"  id="SubmitButton" value="Upload" /></td>
+			</tr>
 			</form>
 			<div id="output"></div>
 			</div>
@@ -41,12 +44,14 @@ if(isset($_SESSION["userid"]))
 	while ($zeile2 = mysql_fetch_array($ergebnis2)) {
 	
 	$showname = $zeile2['Showname'];
-	$posttime = date("d.m.Y - H:i",$zeile2['Datum']);
+	$data = $zeile2['Datum'];
+	$posttime= date("d/ M/ Y g:i ", strtotime($data));
+	
 						echo '<tr>';
 						echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
 						echo '</tr>';
 						echo '<tr>';
-						echo '<td align="center">Postet by '.$showname.' at '.$posttime.'  </td>';
+						echo '<td align="center">Postet by '.$showname.' am '.$posttime.'  </td>';
 						echo '</tr>';
 						}
 					}
