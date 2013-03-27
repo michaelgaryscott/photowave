@@ -23,6 +23,10 @@ if(isset($_SESSION["userid"]))
 			</div>
 			</div>
 			</div>';
+			
+	// Benötigte Variablen
+	// Eigene Benuzuer id
+	$userid_self = $_SESSION["userid"];
 	
 	$sql=' SELECT u.UserID, u.FriendID, f.UserID, f.FotoPath, f.Datum
 			FROM tblfollow as u INNER JOIN tblfoto as f ON u.FriendID = f.UserID
@@ -34,29 +38,123 @@ if(isset($_SESSION["userid"]))
 	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
 	
 	while ($zeile = mysql_fetch_array($ergebnis)) {
-	$fotopath = $zeile['FotoPath'];
-	
-	$sql2=' SELECT x.FotoPath, x.UserID, x.Datum, y.UserID, y.Showname
-			FROM tblfoto as x INNER JOIN tbluser as y ON x.UserID = y.UserID
-			WHERE x.FotoPath = "'.$fotopath.'"';
+		$fotopath = $zeile['FotoPath'];
+		
+		
+		$sql2=' SELECT x.FotoPath, x.UserID, x.Datum, x.FotoID, y.UserID, y.Showname
+				FROM tblfoto as x INNER JOIN tbluser as y ON x.UserID = y.UserID
+				WHERE x.FotoPath = "'.$fotopath.'"';
+				
+				
+		$ergebnis2 = mysql_query($sql2);		
+		while ($zeile2 = mysql_fetch_array($ergebnis2)) {
+			$showname = $zeile2['Showname'];
+			$data = $zeile2['Datum'];
+			$posttime= date("d/ M/ Y g:i ", strtotime($data));
 			
-	$ergebnis2 = mysql_query($sql2);		
-	while ($zeile2 = mysql_fetch_array($ergebnis2)) {
-	
-	$showname = $zeile2['Showname'];
-	$data = $zeile2['Datum'];
-	$posttime= date("d/ M/ Y g:i ", strtotime($data));
-	
-						echo '<tr>';
-						echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
-						echo '</tr>';
-						echo '<tr>';
-						echo '<td align="center">Postet by '.$showname.' am '.$posttime.'  </td>';
-						echo '</tr>';
-						}
-					}
+			// Wer mag dieses Foto?
+			$photoid = $zeile2['FotoID'];
+			$sql_like = "SELECT * FROM tbllikes WHERE
+				UserID='$userid_self' AND
+				FotoID='$photoid'
+				LIMIT 1";
+				
+			// Prüfen, das Foto jemandem gefällt...
+			$_res = mysql_query($sql_like, $db_connection) or die(mysql_error());
+			$_anzahl = @mysql_num_rows($_res);
+			
+			echo '<tr>';
+			echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
+			echo '<td>&nbsp;</td>';
+			echo '</tr>';
+			echo '<tr>';
+			echo '<td align="center">Postet by '.$showname.' am '.$posttime;
+			
+			// Mag jemand dieses Foto?
+			if ($_anzahl == 0)
+			{
+				echo ('<td>
+				<form action="photostream.php" method="POST" name="like">
+				<input type="submit" name="like_label" value="Like">
+				<input type="hidden" name="like_who" value="'.$photoid.'">
+				</form></td>');
+				//echo ("</tr>");
+			}
+			else
+			{
+				echo ('<td>
+				<form action="photostream.php" method="POST" name="dislike">
+				<input type="submit" name="dislike_label" value="Dislike">
+				<input type="hidden" name="like_del" value="'.$photoid.'">
+				</form></td>');	
+			}
+			echo '</td>';
+			echo '</tr>';
+		}
+	}
 	echo '</table>';
+	
+	// Like hinzufügen
+	if(isset($_POST["like_label"]))
+	{
+		// Post Variablen empfangen
+		$liked_photo = mysql_real_escape_string($_POST["like_who"]);
+		$userid_like = mysql_real_escape_string($_SESSION["userid"]);
+
+		// Datenbank update bei Follow
+		$sql_like = "
+			INSERT INTO
+				tbllikes
+				(UserID, FotoID)
+			VALUES
+				('$userid_like', '$liked_photo')
+		";
+
+		mysql_query($sql_like, $db_connection) or die(mysql_error());
+
+		// Site-Refresh
+		$url = $_SERVER['PHP_SELF'];
+		echo '<script type="text/javascript">';
+		echo 'window.location.href="'.$url.'";';
+		echo '</script>';
+		echo '<noscript>';
+		echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+		echo '</noscript>';
+
+	}
+	
+	
+	// Like entfernen
+	if(isset($_POST["dislike_label"]))
+	{
+		// Variablen empfangen
+		$photoid_dislike = mysql_real_escape_string($_POST["like_del"]);
+		$userid_dislike = mysql_real_escape_string($_SESSION["userid"]);
+		
+		
+		// SQL Query
+		$sql_delete = "DELETE FROM tbllikes
+							WHERE UserID = $userid_dislike AND
+							FotoID = $photoid_dislike";
+
+		mysql_query($sql_delete, $db_connection) or die(mysql_error());
+		echo $sql_delete;
+		
+		// Site-Refresh
+		$url = $_SERVER['PHP_SELF'];
+		echo '<script type="text/javascript">';
+		echo 'window.location.href="'.$url.'";';
+		echo '</script>';
+		echo '<noscript>';
+		echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+		echo '</noscript>';
+	}
+	
+	
 }	
+else {
+	echo 'Sie sind nicht berechtigt diese Seite zu sehen.';
+}
 						
 	/*$sql = 	'SELECT u.UserID, u.FriendID
 			FROM tblfollow as u
@@ -86,9 +184,7 @@ if(isset($_SESSION["userid"]))
 	}
 	
 	echo '</table>';
-}*/	else {
-	echo 'Sie sind nicht berechtigt diese Seite zu sehen.';
-}
+}*/
 
 
 include("includes/sidebar-include.php");

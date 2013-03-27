@@ -68,7 +68,7 @@ mysql_select_db('photowave_prod', $db) or die ("Datenbank kann nicht ausgewählt
 						// Löschen
 						if(isset($_POST["del"]))
 							{
-								$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
+								//$db = mysql_connect('localhost', 'photowave_prod', 'Bue3vV-phYa!8twT4pOPfBWwW2') or die('Fehler beim Verbinden zum MySQL-Server');
 	
 	
 									$sql = 'DELETE FROM tblBeitraege 

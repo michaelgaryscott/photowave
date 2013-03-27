@@ -136,9 +136,9 @@ if(isset($_POST["del"]))
 
 	mysql_query($sql_delete, $db_connection) or die(mysql_error());
 
-	echo '<br>Friend ID: '.$friendid_del.'<br>'; 
-	echo '<br>User ID: '.$userid_del.'<br>'; 
-	echo $sql_delete;
+//	echo '<br>Friend ID: '.$friendid_del.'<br>'; 
+//	echo '<br>User ID: '.$userid_del.'<br>'; 
+//	echo $sql_delete;
 	
 	// Site-Refresh
 	$url = $_SERVER['PHP_SELF'];
