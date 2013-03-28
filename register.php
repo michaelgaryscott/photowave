@@ -24,6 +24,7 @@ $forward_captcha = 0;
 $forward_geburtsdatum = 0;
 $forward_showname = 0;
 
+	
 if(!empty($vorname))
 	$return_vorname = ' value="'.$vorname.'"';
 if(!empty($nachname))
@@ -155,6 +156,34 @@ echo '
 	  	echo 'Captcha eingabe ungültig! Bitte versuchen Sie es erneuert.';
 	  echo '</b></font>';
   }
+  
+// Abfangen eines doppelten Shownamen und einer bereits gebrauchten Mailadresse  
+$sql=' SELECT u.Mail, u.Showname
+			FROM tbluser as u'; 
+			
+$ergebnis = mysql_query($sql);
+
+echo '<font color="red"><b>';
+
+while ($zeile = mysql_fetch_array($ergebnis)) {
+$maildb = $zeile['Mail'];
+$shownamedb = $zeile['Showname'];
+
+
+if($mail == $maildb)
+{
+	echo 'Mail bereits in Gebrauch<br />';
+	$forward_showname = 0;  
+}
+if($showname == $shownamedb)
+{
+	echo 'Showname bereits in Gebrauch<br />';
+	$forward_showname = 0;  
+}
+}
+
+echo '</b></font>';
+
 // Forwarding definieren
 if($forward_captcha == 1 and $forward_email == 1 and $forward_nachname == 1 and $forward_pass1 == 1 and $forward_pass2 == 1 and $forward_pass3 == 1 and $forward_vorname == 1 and $forward_showname == 1 and $forward_geburtsdatum == 1)
 {
