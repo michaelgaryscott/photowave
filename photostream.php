@@ -6,9 +6,18 @@ $title = 'Photostream';
 include 'includes/header-include.php';
 if(isset($_SESSION["userid"]))
 {
+$zahl = 4;
 	
 	// Main Part
-	
+	If ($_POST["zahl"] <= 4)
+	{
+		$zahl = 4;
+	}
+	else
+	{
+		$zahl = $_POST["zahl"];
+	}
+		
 	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
 	
 	echo '	<div><br />
@@ -36,7 +45,7 @@ if(isset($_SESSION["userid"]))
 	$ergebnis = mysql_query($sql);
 	
 	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
-	
+	$count = 0;	
 	while ($zeile = mysql_fetch_array($ergebnis)) {
 		$fotopath = $zeile['FotoPath'];
 		
@@ -45,13 +54,13 @@ if(isset($_SESSION["userid"]))
 				FROM tblfoto as x INNER JOIN tbluser as y ON x.UserID = y.UserID
 				WHERE x.FotoPath = "'.$fotopath.'"';
 				
-				
+			
 		$ergebnis2 = mysql_query($sql2);		
-		while ($zeile2 = mysql_fetch_array($ergebnis2)) {
+		while ($zeile2 = mysql_fetch_array($ergebnis2) && $count <= $zahl) {
 			$showname = $zeile2['Showname'];
 			$data = $zeile2['Datum'];
 			$posttime= date("d/ M/ Y g:i ", strtotime($data));
-			
+			$count++;
 			// Wer mag dieses Foto?
 			$photoid = $zeile2['FotoID'];
 			$sql_like = "SELECT * FROM tbllikes WHERE
@@ -92,6 +101,15 @@ if(isset($_SESSION["userid"]))
 			echo '</tr>';
 		}
 	}
+	$zahlre = $zahl+5;
+	echo '<tr>';
+			echo '<td align="center">';
+			echo'<form action="photostream.php" method="post">
+			<input type="hidden" name="zahl" value='.$zahlre.' />
+			<input type="submit" name="submit" value="Mehr Posts Laden" />
+			</form>';
+			echo '</td>';
+	echo '</tr>';
 	echo '</table>';
 	
 	// Like hinzufügen
