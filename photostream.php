@@ -62,7 +62,8 @@ $zahl = 4;
 			$posttime= date("d/ M/ Y g:i ", strtotime($data));
 			$count++;
 			// Wer mag dieses Foto?
-			$photoid = $zeile2['FotoID'];
+			$zeile3 = mysql_fetch_array(mysql_query($sql2));
+			$photoid = $zeile3['FotoID'];
 			$sql_like = "SELECT * FROM tbllikes WHERE
 				UserID='$userid_self' AND
 				FotoID='$photoid'
@@ -77,7 +78,7 @@ $zahl = 4;
 			echo '<td>&nbsp;</td>';
 			echo '</tr>';
 			echo '<tr>';
-			echo '<td align="center">Postet by '.$showname.' am '.$posttime;
+			echo '<td align="center">Postet by '.$showname.' am '.$posttime.'Fotoid: '.$photoid.'</td>';
 			
 			// Mag jemand dieses Foto?
 			if ($_anzahl == 0)
@@ -97,7 +98,6 @@ $zahl = 4;
 				<input type="hidden" name="like_del" value="'.$photoid.'">
 				</form></td>');	
 			}
-			echo '</td>';
 			echo '</tr>';
 		}
 	}
@@ -118,8 +118,11 @@ $zahl = 4;
 		// Post Variablen empfangen
 		$liked_photo = mysql_real_escape_string($_POST["like_who"]);
 		$userid_like = mysql_real_escape_string($_SESSION["userid"]);
+		
+		echo '<br> Liked Photo: '.$liked_photo.'<br>';
+		echo '<br> User who Photo like: '.$userid_like.'<br>';
 
-		// Datenbank update bei Follow
+		// Datenbank update bei Like
 		$sql_like = "
 			INSERT INTO
 				tbllikes
@@ -129,7 +132,7 @@ $zahl = 4;
 		";
 
 		mysql_query($sql_like, $db_connection) or die(mysql_error());
-
+		
 		// Site-Refresh
 		$url = $_SERVER['PHP_SELF'];
 		echo '<script type="text/javascript">';
@@ -138,7 +141,7 @@ $zahl = 4;
 		echo '<noscript>';
 		echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
 		echo '</noscript>';
-
+		
 	}
 	
 	

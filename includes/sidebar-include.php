@@ -24,7 +24,10 @@ if(isset($_SESSION["userid"])) {
 	
 	// Administratoren Menü
 	if($_SESSION["groupid"] == 1) {
+		echo '<br /><b>Admin</b>';
 		echo '<br /><a href="benutzerverwaltung.php">Benutzerverwaltung</a><br />';
+		echo '<a href="photoverwaltung-admin.php">Photoverwaltung</a><br />';
+		echo '<br /><b>User</b><br />';
 		
 	// benutzer Menü
 	} elseif($_SESSION["groupid"] == 2) {
