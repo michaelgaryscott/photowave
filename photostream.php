@@ -1,3 +1,48 @@
+<script type="text/javascript"> 
+
+function setCookie(c_name,value,exdays)
+{
+var exdate=new Date();
+exdate.setDate(exdate.getDate() + exdays);
+var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+document.cookie=c_name + "=" + c_value;
+}
+
+function getCookie(c_name)
+{
+var i,x,y,ARRcookies=document.cookie.split(";");
+for (i=0;i<ARRcookies.length;i++)
+{
+  x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+  y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+  x=x.replace(/^\s+|\s+$/g,"");
+  if (x==c_name)
+    {
+    return unescape(y);
+    }
+  }
+}
+
+
+
+function loadpos(){
+if (getCookie("doscroll") == 1) {
+window.scrollTo(0,getCookie("poss"));
+setCookie("doscroll",0,365);
+}
+
+}
+
+function savepos(){
+setCookie("poss",window.pageYOffset,365);
+}
+
+
+function scrollit(){
+setCookie("doscroll",1, 365);
+}
+
+</script>
 <?php
 
 include 'includes/config.php';
@@ -6,17 +51,20 @@ $title = 'Photostream';
 include 'includes/header-include.php';
 if(isset($_SESSION["userid"]))
 {
-$zahl = 4;
+$zahl = 5;
+$count = 0;	
 	
 	// Main Part
-	If ($_POST["zahl"] <= 4)
+	
+	If ($_POST["zahl"] <= 5)
 	{
-		$zahl = 4;
+		$zahl = 5;
 	}
 	else
 	{
 		$zahl = $_POST["zahl"];
 	}
+	
 		
 	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
 	
@@ -45,7 +93,7 @@ $zahl = 4;
 	$ergebnis = mysql_query($sql);
 	
 	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
-	$count = 0;	
+	
 	while ($zeile = mysql_fetch_array($ergebnis)) {
 		$fotopath = $zeile['FotoPath'];
 		
@@ -55,30 +103,35 @@ $zahl = 4;
 				WHERE x.FotoPath = "'.$fotopath.'"';
 				
 			
-		$ergebnis2 = mysql_query($sql2);		
-		while ($zeile2 = mysql_fetch_array($ergebnis2) && $count <= $zahl) {
+		$ergebnis2 = mysql_query($sql2);	
+		//Hier werden die Anzahl Post abgefangen nur 5 angezeigt bis man auf mehr post Anzeigen klickt.
+		while ($count < $zahl && $zeile2 = mysql_fetch_array($ergebnis2)) {
+		
 			$showname = $zeile2['Showname'];
 			$data = $zeile2['Datum'];
-			$posttime= date("d/ M/ Y g:i ", strtotime($data));
+			$posttime= date("d/ M/ Y G:i ", strtotime($data));
 			$count++;
+			
 			// Wer mag dieses Foto?
-			$zeile3 = mysql_fetch_array(mysql_query($sql2));
-			$photoid = $zeile3['FotoID'];
+			$photoid = $zeile2['FotoID'];
 			$sql_like = "SELECT * FROM tbllikes WHERE
 				UserID='$userid_self' AND
 				FotoID='$photoid'
 				LIMIT 1";
-				
+			
+			
 			// Prüfen, das Foto jemandem gefällt...
-			$_res = mysql_query($sql_like, $db_connection) or die(mysql_error());
+			//$_res = mysql_query($sql_like, $db_connection) or die(mysql_error());
+			$_res = mysql_query($sql_like);
 			$_anzahl = @mysql_num_rows($_res);
 			
+			// HIer geschieht die ganze Ausgabe der Bilder und der Likes in Form einer Tabelle
 			echo '<tr>';
 			echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
 			echo '<td>&nbsp;</td>';
 			echo '</tr>';
 			echo '<tr>';
-			echo '<td align="center">Postet by '.$showname.' am '.$posttime.'Fotoid: '.$photoid.'</td>';
+			echo '<td align="center">Postet by '.$showname.' am '.$posttime.'Fotoid: '.$photoid.'Count:'.$count.'Zahl:'.$zahl.'</td>';
 			
 			// Mag jemand dieses Foto?
 			if ($_anzahl == 0)
@@ -99,12 +152,15 @@ $zahl = 4;
 				</form></td>');	
 			}
 			echo '</tr>';
+			
 		}
+	
 	}
+	//Hier wird der Mehr Posts Button angezeigt und eingerichtet, danach werden 10 Posts geladen.
 	$zahlre = $zahl+5;
 	echo '<tr>';
 			echo '<td align="center">';
-			echo'<form action="photostream.php" method="post">
+			echo'<form action="photostream.php" method="post" OnClick="scrollit();">
 			<input type="hidden" name="zahl" value='.$zahlre.' />
 			<input type="submit" name="submit" value="Mehr Posts Laden" />
 			</form>';
@@ -136,7 +192,7 @@ $zahl = 4;
 		// Site-Refresh
 		$url = $_SERVER['PHP_SELF'];
 		echo '<script type="text/javascript">';
-		echo 'window.location.href="'.$url.'";';
+		echo 'window.location.href="'.$url.'"; ';
 		echo '</script>';
 		echo '<noscript>';
 		echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
