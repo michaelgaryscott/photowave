@@ -42,6 +42,7 @@ if($_SESSION["groupid"] == 1) {
 	$sql = 	'
 		SELECT *
 		FROM tblfoto
+		ORDER by Datum DESC
 	';
 	
 	$ergebnis = mysql_query($sql);

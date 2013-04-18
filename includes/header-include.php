@@ -24,7 +24,7 @@
 	}
 ?>
 </head>
-<body>
+<body onload="loadpos()" onunload="savepos()">
 <div id="art-main">
     <div class="cleared reset-box"></div>
     <div id="art-hmenu-bg" class="art-bar art-nav"></div>
