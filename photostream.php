@@ -1,3 +1,9 @@
+<?php
+// HEADER
+include 'includes/config.php';
+$menu_active = 'Photostream';
+$title = 'Photostream';
+$header[] = '
 <script type="text/javascript"> 
 
 function setCookie(c_name,value,exdays)
@@ -43,26 +49,55 @@ setCookie("doscroll",1, 365);
 }
 
 </script>
-<?php
-
-include 'includes/config.php';
-$menu_active = 'Photostream';
-$title = 'Photostream';
+';
 include 'includes/header-include.php';
+
+// MAIN
 if(isset($_SESSION["userid"]))
 {
-$zahl = 5;
-$count = 0;	
+	$zahl = 5;
+
+	// Like hinzufügen
+	if(isset($_POST["like_label"]))
+	{
+		// Post Variablen empfangen
+		$liked_photo = mysql_real_escape_string($_POST["like_who"]);
+		$userid_like = mysql_real_escape_string($_SESSION["userid"]);
+
+		// Datenbank update bei Like
+		$sql_like = '
+			INSERT INTO tbllikes
+				(UserID, FotoID)
+			VALUES
+				("'.$userid_like.'", "'.$liked_photo.'")
+		';
+		mysql_query($sql_like, $db_connection) or die(mysql_error());
+	}
+	// Like entfernen
+	if(isset($_POST["dislike_label"]))
+	{
+		// Variablen empfangen
+		$photoid_dislike = mysql_real_escape_string($_POST["like_del"]);
+		$userid_dislike = mysql_real_escape_string($_SESSION["userid"]);
+		
+		// SQL Query
+		$sql_delete = '
+			DELETE FROM tbllikes
+			WHERE UserID = '.$userid_dislike.' AND
+			FotoID = '.$photoid_dislike;
+
+		mysql_query($sql_delete, $db_connection) or die(mysql_error());
+	}
 	
 	// Main Part
 	
-	If ($_POST["zahl"] <= 5)
+	If ($_GET["zahl"] <= 5)
 	{
 		$zahl = 5;
 	}
 	else
 	{
-		$zahl = $_POST["zahl"];
+		$zahl = $_GET["zahl"];
 	}
 	
 		
@@ -81,187 +116,76 @@ $count = 0;
 			</div>
 			</div>';
 			
-	// Benötigte Variablen
-	// Eigene Benuzuer id
-	$userid_self = $_SESSION["userid"];
-	
-	$sql=' SELECT u.UserID, u.FriendID, f.UserID, f.FotoPath, f.Datum
-			FROM tblfollow as u INNER JOIN tblfoto as f ON u.FriendID = f.UserID
-			WHERE u.UserID = "'.$_SESSION["userid"].'"
-			ORDER by f.Datum DESC';
+	$foto_sql=' SELECT 
+				f.*, u.*, COUNT(l.UserID) AS likes, COUNT(DISTINCT l2.UserID) AS liked
+			FROM 
+				tblfollow AS w
+				INNER JOIN tblfoto AS f ON f.UserID = w.FriendID
+				INNER JOIN tbluser AS u ON u.UserID = f.UserID
+				LEFT JOIN tbllikes AS l ON l.FotoID = f.FotoID
+				LEFT JOIN tbllikes AS l2 ON l2.FotoID = f.FotoID AND l2.UserID = w.UserID
+			WHERE 
+				w.UserID = "'.$_SESSION['userid'].'"
+			GROUP BY
+				f.FotoID
+			ORDER BY 
+				f.Datum DESC
+			LIMIT '.mysql_real_escape_string($zahl);
 			
-	$ergebnis = mysql_query($sql);
+	$foto_query = mysql_query($foto_sql);
 	
 	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
 	
-	while ($zeile = mysql_fetch_array($ergebnis)) {
-		$fotopath = $zeile['FotoPath'];
+	while ($foto = mysql_fetch_array($foto_query)) {
+	
+		$posttime = date("d/ M/ Y G:i ", strtotime($foto['Datum']));
 		
+		// HIer geschieht die ganze Ausgabe der Bilder und der Likes in Form einer Tabelle
+		echo '<tr>
+				<td align="center"><img src="'.$foto['FotoPath'].'" alt="Thumbnail"></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center">Postet by '.$foto['Showname'].' am '.$posttime.'Fotoid: '.$foto['FotoID'].' Likes:'.$foto['likes'].' Liked:'.$foto['liked'].'</td>';
 		
-		$sql2=' SELECT x.FotoPath, x.UserID, x.Datum, x.FotoID, y.UserID, y.Showname
-				FROM tblfoto as x INNER JOIN tbluser as y ON x.UserID = y.UserID
-				WHERE x.FotoPath = "'.$fotopath.'"';
-				
-			
-		$ergebnis2 = mysql_query($sql2);	
-		//Hier werden die Anzahl Post abgefangen nur 5 angezeigt bis man auf mehr post Anzeigen klickt.
-		while ($count < $zahl && $zeile2 = mysql_fetch_array($ergebnis2)) {
-		
-			$showname = $zeile2['Showname'];
-			$data = $zeile2['Datum'];
-			$posttime= date("d/ M/ Y G:i ", strtotime($data));
-			$count++;
-			
-			// Wer mag dieses Foto?
-			$photoid = $zeile2['FotoID'];
-			$sql_like = "SELECT * FROM tbllikes WHERE
-				UserID='$userid_self' AND
-				FotoID='$photoid'
-				LIMIT 1";
-			
-			
-			// Prüfen, das Foto jemandem gefällt...
-			//$_res = mysql_query($sql_like, $db_connection) or die(mysql_error());
-			$_res = mysql_query($sql_like);
-			$_anzahl = @mysql_num_rows($_res);
-			
-			// HIer geschieht die ganze Ausgabe der Bilder und der Likes in Form einer Tabelle
-			echo '<tr>';
-			echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
-			echo '<td>&nbsp;</td>';
-			echo '</tr>';
-			echo '<tr>';
-			echo '<td align="center">Postet by '.$showname.' am '.$posttime.'Fotoid: '.$photoid.'Count:'.$count.'Zahl:'.$zahl.'</td>';
-			
-			// Mag jemand dieses Foto?
-			if ($_anzahl == 0)
-			{
-				echo ('<td>
-				<form action="photostream.php" method="POST" name="like">
-				<input type="submit" name="like_label" value="Like">
-				<input type="hidden" name="like_who" value="'.$photoid.'">
-				</form></td>');
-				//echo ("</tr>");
-			}
-			else
-			{
-				echo ('<td>
-				<form action="photostream.php" method="POST" name="dislike">
-				<input type="submit" name="dislike_label" value="Dislike">
-				<input type="hidden" name="like_del" value="'.$photoid.'">
-				</form></td>');	
-			}
-			echo '</tr>';
-			
+		// Mag jemand dieses Foto?
+		if ($foto['liked'] == 0)
+		{
+			echo '<td>
+			<form action="" method="POST" name="like" OnClick="scrollit();">
+			<input type="submit" name="like_label" value="Like">
+			<input type="hidden" name="like_who" value="'.$foto['FotoID'].'">
+			</form></td>';
 		}
+		else
+		{
+			echo '<td>
+			<form action="" method="POST" name="dislike" OnClick="scrollit();">
+			<input type="submit" name="dislike_label" value="Dislike">
+			<input type="hidden" name="like_del" value="'.$foto['FotoID'].'">
+			</form></td>';	
+		}
+		echo '</tr>';
 	
 	}
 	//Hier wird der Mehr Posts Button angezeigt und eingerichtet, danach werden 10 Posts geladen.
 	$zahlre = $zahl+5;
 	echo '<tr>';
 			echo '<td align="center">';
-			echo'<form action="photostream.php" method="post" OnClick="scrollit();">
-			<input type="hidden" name="zahl" value='.$zahlre.' />
-			<input type="submit" name="submit" value="Mehr Posts Laden" />
-			</form>';
+//			echo'<form action="photostream.php" method="get" OnClick="scrollit();">
+//			<input type="hidden" name="zahl" value='.$zahlre.' />
+//			<input type="submit" name="submit" value="Mehr Posts Laden" />
+//			</form>';
+			echo '<a href="photostream.php?zahl='.$zahlre.'" OnClick="scrollit();">Mehr Posts Laden</a>';
 			echo '</td>';
 	echo '</tr>';
 	echo '</table>';
-	
-	// Like hinzufügen
-	if(isset($_POST["like_label"]))
-	{
-		// Post Variablen empfangen
-		$liked_photo = mysql_real_escape_string($_POST["like_who"]);
-		$userid_like = mysql_real_escape_string($_SESSION["userid"]);
-		
-		echo '<br> Liked Photo: '.$liked_photo.'<br>';
-		echo '<br> User who Photo like: '.$userid_like.'<br>';
-
-		// Datenbank update bei Like
-		$sql_like = "
-			INSERT INTO
-				tbllikes
-				(UserID, FotoID)
-			VALUES
-				('$userid_like', '$liked_photo')
-		";
-
-		mysql_query($sql_like, $db_connection) or die(mysql_error());
-		
-		// Site-Refresh
-		$url = $_SERVER['PHP_SELF'];
-		echo '<script type="text/javascript">';
-		echo 'window.location.href="'.$url.'"; ';
-		echo '</script>';
-		echo '<noscript>';
-		echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
-		echo '</noscript>';
-		
-	}
-	
-	
-	// Like entfernen
-	if(isset($_POST["dislike_label"]))
-	{
-		// Variablen empfangen
-		$photoid_dislike = mysql_real_escape_string($_POST["like_del"]);
-		$userid_dislike = mysql_real_escape_string($_SESSION["userid"]);
-		
-		
-		// SQL Query
-		$sql_delete = "DELETE FROM tbllikes
-							WHERE UserID = $userid_dislike AND
-							FotoID = $photoid_dislike";
-
-		mysql_query($sql_delete, $db_connection) or die(mysql_error());
-		echo $sql_delete;
-		
-		// Site-Refresh
-		$url = $_SERVER['PHP_SELF'];
-		echo '<script type="text/javascript">';
-		echo 'window.location.href="'.$url.'";';
-		echo '</script>';
-		echo '<noscript>';
-		echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
-		echo '</noscript>';
-	}
-	
 	
 }	
 else {
 	echo 'Sie sind nicht berechtigt diese Seite zu sehen.';
 }
-						
-	/*$sql = 	'SELECT u.UserID, u.FriendID
-			FROM tblfollow as u
-			WHERE u.UserID = "'.$_SESSION["userid"].'"';
-		
 
-	$ergebnis = mysql_query($sql);
-						 	
-	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
-        
-	while ($zeile = mysql_fetch_array($ergebnis)) {
-	$friendid = $zeile['FriendID'];
-	
-		$sql2 =' 	SELECT f.UserID, f.FotoPath, f.Datum
-					FROM tblfoto as f
-					WHERE f.UserID = "'.$friendid.'"
-					ORDER BY f.Datum';
-					
-					$ergebnis2 = mysql_query($sql2);
-					while ($zeile2 = mysql_fetch_array($ergebnis2)){
-						$fotopath = $zeile2['FotoPath'];
-						echo '<tr>';
-						echo '<td align="center"><img src="'.$fotopath.'" alt="Thumbnail"></td>';
-						echo '</tr>';
-						
-				}
-	}
-	
-	echo '</table>';
-}*/
 
 
 include("includes/sidebar-include.php");

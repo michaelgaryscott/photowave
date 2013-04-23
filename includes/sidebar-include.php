@@ -82,7 +82,6 @@ if(isset($_SESSION["userid"])) {
 			<td>&nbsp;</td>
 		  </tr>
 		</table>
-		<br />
 	</form>
 	<form method="get" action="./register.php">
 		<input type="submit" value="Registrieren" />

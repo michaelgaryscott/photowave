@@ -6,7 +6,7 @@ $title = 'Kontakt';
 include 'includes/header-include.php';
 
 echo '
-<p><span style="font-weight: bold;">Falls fehler, Fragen oder sonstiges auftauchen, stehe ich jederzeit zur verfügung.</span></p>
+<p><span style="font-weight: bold;">Falls Fehler, Fragen oder sonstiges auftauchen, stehe ich jederzeit zur Verfügung.</span></p>
 
 
 <h3>Kontakt</h3>
