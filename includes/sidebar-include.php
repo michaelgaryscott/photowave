@@ -29,13 +29,15 @@ if(isset($_SESSION["userid"])) {
 		echo '<a href="photoverwaltung-admin.php">Photoverwaltung</a><br />';
 		echo '<br /><b>User</b><br />';
 		
-	// benutzer Menü
+	// Benutzer Menü
 	} elseif($_SESSION["groupid"] == 2) {
 		echo '<br /><a href="benutzer.php">Profil bearbeiten</a><br />';
 	}
 	
 	// Allgemeines Menü
 	echo '<a href="photoverwaltung.php">Photoverwaltung</a><br />';
+	echo '<a href="profil.php?userid='.$_SESSION["userid"].'">Profilseite</a><br />';
+	echo '<a href="profilfoto.php">Profilfoto</a><br />';
 	
 	// Logout Button
 	echo '

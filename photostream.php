@@ -146,7 +146,7 @@ if(isset($_SESSION["userid"]))
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td align="center">Postet by '.$foto['Showname'].' am '.$posttime.'Fotoid: '.$foto['FotoID'].' Likes:'.$foto['likes'].' Liked:'.$foto['liked'].'</td>';
+				<td align="center">Postet by <a href="profil.php?userid='.$foto["UserID"].'">'.$foto['Showname'].'</a> am '.$posttime.' Likes:'.$foto['likes'].'</td>';
 		
 		// Mag jemand dieses Foto?
 		if ($foto['liked'] == 0)
