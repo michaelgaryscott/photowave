@@ -63,7 +63,7 @@ if(isset($_SESSION["userid"])) {
 			WHERE UserID = '.$_SESSION["userid"].'
 		';
 		//echo '<br>SQL: '.$sql.'<br>';
-		
+		echo '<br><b><font size=2>Das Foto wurde erfolgreich als Profilbild gesetzt!</font></b><br>';
 	 	mysql_query($sql);
 	
 	

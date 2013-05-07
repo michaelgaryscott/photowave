@@ -21,6 +21,26 @@ if (isset($login_out)) {
 // EINGELOGGT?
 if(isset($_SESSION["userid"])) {
 	echo 'Willkommen '.$_SESSION["showname"].'.<br />';
+	// Profilfoto Anzeigen
+	
+	$sql = ' 	SELECT * FROM tblUser
+					WHERE UserID = "'.$_SESSION['userid'].'"';
+		
+	$get_query = mysql_query($sql);
+	$user = mysql_fetch_array($get_query);
+	
+	$sql3= ' SELECT * FROM tblfoto
+				WHERE FotoID = '.$user["ProfilephotoID"].'';
+				
+	$get_query3 = mysql_query($sql3);
+	$profilfoto = mysql_fetch_array($get_query3);
+	
+	if($profilfoto["FotoName"] != "") {
+		echo '<br /><img src="uploads/thumb_'.$profilfoto["FotoName"].'" width="150" height="150" alt="Profilbild"><br />';
+	}
+	else {
+		echo '<br /><img src="images/profile.png" width="150" height="150" alt="Profilbild"><br />';
+	}
 	
 	// Administratoren Menü
 	if($_SESSION["groupid"] == 1) {

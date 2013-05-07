@@ -114,8 +114,9 @@ if(isset($_SESSION["userid"]))
 			<div id="output"></div>
 			</div>
 			</div>
-			</div>';
-			
+			</div>
+			</table>';
+		
 	$foto_sql=' SELECT 
 				f.*, u.*, COUNT(l.UserID) AS likes, COUNT(DISTINCT l2.UserID) AS liked
 			FROM 
@@ -133,55 +134,60 @@ if(isset($_SESSION["userid"]))
 			LIMIT '.mysql_real_escape_string($zahl);
 			
 	$foto_query = mysql_query($foto_sql);
-	
+	$anzahl = @mysql_num_rows($foto_query);
+	echo $anzahl;
+	if($anzahl > 0){
 	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
-	
-	while ($foto = mysql_fetch_array($foto_query)) {
-	
-		$posttime = date("d/ M/ Y G:i ", strtotime($foto['Datum']));
+		while ($foto = mysql_fetch_array($foto_query)) {
 		
-		// HIer geschieht die ganze Ausgabe der Bilder und der Likes in Form einer Tabelle
-		echo '<tr>
-				<td align="center"><img src="'.$foto['FotoPath'].'" alt="Thumbnail"></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td align="center">Postet by <a href="profil.php?userid='.$foto["UserID"].'">'.$foto['Showname'].'</a> am '.$posttime.' Likes:'.$foto['likes'].'</td>';
+			$posttime = date("d/ M/ Y G:i ", strtotime($foto['Datum']));
+			
+			// HIer geschieht die ganze Ausgabe der Bilder und der Likes in Form einer Tabelle
+			echo '<tr>
+					<td align="center"><img src="'.$foto['FotoPath'].'" alt="Thumbnail"></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td align="center">Postet by <a href="profil.php?userid='.$foto["UserID"].'">'.$foto['Showname'].'</a> am '.$posttime.' Likes:'.$foto['likes'].'</td>';
+			
+			// Mag jemand dieses Foto?
+			if ($foto['liked'] == 0)
+			{
+				echo '<td>
+				<form action="" method="POST" name="like" OnClick="scrollit();">
+				<input type="submit" name="like_label" value="Like">
+				<input type="hidden" name="like_who" value="'.$foto['FotoID'].'">
+				</form></td>';
+			}
+			else
+			{
+				echo '<td>
+				<form action="" method="POST" name="dislike" OnClick="scrollit();">
+				<input type="submit" name="dislike_label" value="Dislike">
+				<input type="hidden" name="like_del" value="'.$foto['FotoID'].'">
+				</form></td>';	
+			}
+			echo '</tr>';
 		
-		// Mag jemand dieses Foto?
-		if ($foto['liked'] == 0)
-		{
-			echo '<td>
-			<form action="" method="POST" name="like" OnClick="scrollit();">
-			<input type="submit" name="like_label" value="Like">
-			<input type="hidden" name="like_who" value="'.$foto['FotoID'].'">
-			</form></td>';
 		}
-		else
-		{
-			echo '<td>
-			<form action="" method="POST" name="dislike" OnClick="scrollit();">
-			<input type="submit" name="dislike_label" value="Dislike">
-			<input type="hidden" name="like_del" value="'.$foto['FotoID'].'">
-			</form></td>';	
-		}
+		//Hier wird der Mehr Posts Button angezeigt und eingerichtet, danach werden 10 Posts geladen.
+		$zahlre = $zahl+5;
+		echo '<tr>';
+				echo '<td align="center">';
+	//			echo'<form action="photostream.php" method="get" OnClick="scrollit();">
+	//			<input type="hidden" name="zahl" value='.$zahlre.' />
+	//			<input type="submit" name="submit" value="Mehr Posts Laden" />
+	//			</form>';
+				echo '<a href="photostream.php?zahl='.$zahlre.'" OnClick="scrollit();">Mehr Posts Laden</a>';
+				echo '</td>';
 		echo '</tr>';
-	
+		echo '</table>';
+		
 	}
-	//Hier wird der Mehr Posts Button angezeigt und eingerichtet, danach werden 10 Posts geladen.
-	$zahlre = $zahl+5;
-	echo '<tr>';
-			echo '<td align="center">';
-//			echo'<form action="photostream.php" method="get" OnClick="scrollit();">
-//			<input type="hidden" name="zahl" value='.$zahlre.' />
-//			<input type="submit" name="submit" value="Mehr Posts Laden" />
-//			</form>';
-			echo '<a href="photostream.php?zahl='.$zahlre.'" OnClick="scrollit();">Mehr Posts Laden</a>';
-			echo '</td>';
-	echo '</tr>';
-	echo '</table>';
-	
-}	
+	else{
+		echo'Es sind keine Bilder für die Anzeige verfügbar.';
+	}
+}
 else {
 	echo 'Sie sind nicht berechtigt diese Seite zu sehen.';
 }

@@ -312,14 +312,6 @@ elseif($_SESSION["groupid"] == 2)
 			  <td><input type="password" name="passwort_repeat" id="passwort_repeat"'.$pass_return.' /></td>
 			</tr>
 			<tr>
-			  <td><label for="group">gruppe</label></td>
-			  <td><select name="groupid">
-				  <option value="2"'; if($groupid == 2) {echo 'selected="selected"';} echo'>Registriert</option>
-				  <option value="1"'; if($groupid == 1) {echo 'selected="selected"';} echo'>Administrator</option>
-				  </select>
-			  </td>
-			</tr>
-			<tr>
 			  <td>
 				</td>
 			  <td><input type="submit" name="change" id="change" value="Ändern" /></td>
@@ -349,9 +341,8 @@ elseif($_SESSION["groupid"] == 2)
 		$sql = "SELECT u.Password
 				FROM tblUser AS u
 				WHERE UserID = '$userid'";
-		/*
-		mysql_select_db('photowave_prod', $db) or die ("Datenbank kann nicht ausgewählt werden");
-		*/
+
+
 							 $ergebnis = mysql_query($sql)
 								or die('Fehler bei der Datenbankabfrage');
 							

@@ -25,7 +25,7 @@ if(isset($_SESSION["userid"]))
 	// Auflistung aller Benutzer, ausser dem eigenen
 	echo '<table border="0" width="100%">';
 	echo '<tr>';
-	echo '<td width="60"><b>UserID</b></td>';
+//	echo '<td width="60"><b>UserID</b></td>';
 	echo '<td width="170"><b>Benutzer</b></td>';		
 	echo '<td width="230"><b>Mail</b></td>';
 //	echo '<td width="60"><b>GroupID</b></td>';
@@ -57,7 +57,7 @@ if(isset($_SESSION["userid"]))
 		
 		
 		echo '<tr>';			
-		echo '<td>'.$userid.'</td>';
+//		echo '<td>'.$userid.'</td>';
 		echo '<td><a href="profil.php?userid='.$userid.'">'.$nachname.', '.$vorname.'</td>';
 		echo '<td>'.$mail.'</td>';
 //		echo '<td>$groupid</td>';
