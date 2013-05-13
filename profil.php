@@ -125,9 +125,9 @@ if(isset($_GET["userid"]) && isset($_SESSION["userid"]))
 	$geburtsdatum = date("d/ M/ Y", strtotime($user["Geburtsdatum"]));	
 	
 	if($user["GroupID"] == 2)
-	$status= "Normaler Benutzer";
+		$status= "Normaler Benutzer";
 	else
-	$status= "Admin";
+		$status= "Admin";
 	
 	// Ausgabe der Profilinformationen in Form einer Tabelle ohne Rahmen...
 	echo'
@@ -138,37 +138,37 @@ if(isset($_GET["userid"]) && isset($_SESSION["userid"]))
 			';
 			// Hier wird abgefange, dass wenn kein Profilbild ausgewählt wurde, trotzdem ein Dummybild gezeigt wird...
 			if($profilfoto['FotoName'] == "") {
-				echo '<td rowspan="7" align="center"><img src="images/profile.png" height="150" width="150" align="center" alt="Profilbild"></td>';
+				echo '<td rowspan="7" align="center" valign="top"><img src="images/profile.png" height="150" width="150" align="center" alt="Profilbild"></td>';
 				
 			}
 			else {
-				echo '<td rowspan="7" align="center"><img src="./uploads/thumb_'.$profilfoto['FotoName'].'" height="150" width="150" align="center" alt="Thumbnail"></td>';
+				echo '<td rowspan="7" align="center" valign="top"><img src="./uploads/thumb_'.$profilfoto['FotoName'].'" height="150" width="150" align="center" alt="Thumbnail"></td>';
 			}
 			
 	echo'		
 		</tr>
 		<tr>
-			<td>Vorname: '.$user["Vorname"].'</td>
+			<td valign="top">Vorname: '.$user["Vorname"].'</td>
 			
 		</tr>
 		<tr>
-			<td>Name: '.$user["Name"].'</td>
+			<td valign="top">Name: '.$user["Name"].'</td>
 			
 		</tr>
 		<tr>
-			<td>Alter: '.alter($user["Geburtsdatum"]).'</td>
+			<td valign="top">Alter: '.alter($user["Geburtsdatum"]).'</td>
 			
 		</tr>
 		<tr>
-			<td>Geburtstag: '.$geburtsdatum.'</td>
+			<td valign="top">Geburtstag: '.$geburtsdatum.'</td>
 			
 		</tr>
 		<tr>
-			<td>Mail: '.$user["Mail"].'</td>
+			<td valign="top">Mail: '.$user["Mail"].'</td>
 			
 		</tr>
 		<tr>
-			<td>Art des Benutzers: '.$status.'</td>
+			<td valign="top">Art des Benutzers: '.$status.'</td>
 			
 		</tr>
 	</table>
@@ -184,8 +184,8 @@ if(isset($_GET["userid"]) && isset($_SESSION["userid"]))
 		
 	
 	
-		
-	$sql1=' SELECT 
+// Alter SQl Befehl Originalname: "$sql1".
+/*	$sql1=' SELECT 
 					f.*, u.*, COUNT(l.UserID) AS likes, COUNT(DISTINCT l2.UserID) AS liked
 				FROM 
 					tblfollow AS w
@@ -200,6 +200,28 @@ if(isset($_GET["userid"]) && isset($_SESSION["userid"]))
 				ORDER BY 
 					f.Datum DESC
 				LIMIT '.mysql_real_escape_string($zahl);
+*/
+// ---------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------ SQL für Fabio ------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------
+
+	$sql1 = 'SELECT u.*,f.* , count(x.Userid) as liked, count(l.Userid) as likes
+					FROM
+						tblfoto AS f
+						INNER JOIN tblUser AS u ON f.UserID = u.UserID
+						LEFT JOIN tbllikes as l On l.FotoID = f.FotoID
+						LEFT JOIN tbllikes as x ON x.UserID = '.$_SESSION['userid'].' AND x.FotoID = f.FotoID
+					WHERE 
+						f.UserID= '.$_GET['userid'].'
+					GROUP BY
+						f.FotoID
+					ORDER BY 
+					f.Datum DESC
+				LIMIT '.mysql_real_escape_string($zahl);
+				
+// ---------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------- SQL für Fabio Ende ---------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------
 		
 	$ergebnis1 = mysql_query($sql1);
 	$anzahl = @mysql_num_rows($ergebnis1);
@@ -211,16 +233,19 @@ if(isset($_GET["userid"]) && isset($_SESSION["userid"]))
 	
 	// Hier werden die Bilder mit Like funktion in form einer Tabelle ausgegeben, und zwar nur des Users wessen wir das Profil besuchen...
 	$posttime = date("d/ M/ Y G:i ", strtotime($zeile1['Datum']));
+	
 			echo '
 			 <tr>
 				<td align="center"><img src="'.$zeile1['FotoPath'].'" alt="Thumbnail"></td>
-				<td>&nbsp;</td>
+				<td align="left" valign="bottom"> <img src="./images/like_thumb.png" align="absbottom" alt="Like" width="25" height="25"><font size="6" color="104E8B">'.$zeile1['likes'].'</font></td>
 			</tr>
 			<tr>
-								<td align="center">Postet am '.$posttime.' Likes:'.$zeile1['likes'].'</td>';
+								<td align="center"> Postet am '.$posttime.'</td>';
 			
 		
 	// Mag jemand dieses Foto?
+	
+	
 		if ($zeile1['liked'] == 0)
 		{
 			echo '<td>

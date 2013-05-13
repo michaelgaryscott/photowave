@@ -25,14 +25,15 @@ if(isset($_SESSION["userid"]))
 	// Auflistung aller Benutzer, ausser dem eigenen
 	echo '<table border="0" width="100%">';
 	echo '<tr>';
+	echo '<td width="80"><b>Showname</b></td>';
 //	echo '<td width="60"><b>UserID</b></td>';
-	echo '<td width="170"><b>Benutzer</b></td>';		
+	echo '<td width="130"><b>Benutzer</b></td>';		
 	echo '<td width="230"><b>Mail</b></td>';
 //	echo '<td width="60"><b>GroupID</b></td>';
-	echo '<td width="60"><b>Showname</b></td>';
 	echo '<td width="55"><b>Follow</b></td>';
 	echo '</tr>';		
 
+	
 	while ($zeile = mysql_fetch_array($ergebnis)) {
 		$userid = $zeile['UserID'];
 		$nachname = $zeile['Name'];
@@ -58,10 +59,11 @@ if(isset($_SESSION["userid"]))
 		
 		echo '<tr>';			
 //		echo '<td>'.$userid.'</td>';
+		echo '<td>'.$showname.'</td>';
 		echo '<td><a href="profil.php?userid='.$userid.'">'.$nachname.', '.$vorname.'</td>';
 		echo '<td>'.$mail.'</td>';
 //		echo '<td>$groupid</td>';
-		echo '<td>'.$showname.'</td>';
+		
 		if ($_anzahl > 0)
 		{
 			echo '<td>

@@ -91,6 +91,7 @@ if(isset($_SESSION["userid"]))
 	
 	// Main Part
 	
+	// Hier wird die Anzahl von Post die angezeigt werde festgelegt...
 	If ($_GET["zahl"] <= 5)
 	{
 		$zahl = 5;
@@ -135,7 +136,7 @@ if(isset($_SESSION["userid"]))
 			
 	$foto_query = mysql_query($foto_sql);
 	$anzahl = @mysql_num_rows($foto_query);
-	echo $anzahl;
+	
 	if($anzahl > 0){
 	echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
 		while ($foto = mysql_fetch_array($foto_query)) {
@@ -144,11 +145,11 @@ if(isset($_SESSION["userid"]))
 			
 			// HIer geschieht die ganze Ausgabe der Bilder und der Likes in Form einer Tabelle
 			echo '<tr>
-					<td align="center"><img src="'.$foto['FotoPath'].'" alt="Thumbnail"></td>
-					<td>&nbsp;</td>
+					<td align="center" valign="bottom"><img src="'.$foto['FotoPath'].'" alt="Thumbnail"></td>
+					<td align="left" valign="bottom"> <img src="./images/like_thumb.png" align="absbottom" alt="Like" width="25" height="25"><font size="6" color="104E8B">'.$foto['likes'].'</font></td>
 				</tr>
 				<tr>
-					<td align="center">Postet by <a href="profil.php?userid='.$foto["UserID"].'">'.$foto['Showname'].'</a> am '.$posttime.' Likes:'.$foto['likes'].'</td>';
+					<td align="center">Postet by <a href="profil.php?userid='.$foto["UserID"].'">'.$foto['Showname'].'</a> am '.$posttime.'</td>';
 			
 			// Mag jemand dieses Foto?
 			if ($foto['liked'] == 0)
@@ -184,13 +185,13 @@ if(isset($_SESSION["userid"]))
 		echo '</table>';
 		
 	}
-	else{
-		echo'Es sind keine Bilder für die Anzeige verfügbar.';
-	}
+	else{ 
+		  echo "<br>Es sind keine Bilder f&uuml;r die Anzeige verf&uuml;gbar.";
+		}
 }
 else {
 	echo 'Sie sind nicht berechtigt diese Seite zu sehen.';
-}
+	}
 
 
 
