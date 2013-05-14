@@ -30,11 +30,15 @@ $menu = array(
 
 if(isset($_SESSION["userid"])) {
 	$menu[] = array(
-		'name'	=> 'Photostream',
-		'link'	=> './photostream.php'
-	);
-	$menu[] = array(
 		'name'	=> 'Freunde Finden',
 		'link'	=> './user_overview.php'
 	);
+//	array_unshift($menu, $menu_add);
+	
+	$menu_add = array(
+		'name'	=> 'Photostream',
+		'link'	=> './photostream.php'
+	);
+	array_unshift($menu, $menu_add);
+
 }
