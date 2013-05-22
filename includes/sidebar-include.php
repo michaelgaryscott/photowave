@@ -61,7 +61,7 @@ if(isset($_SESSION["userid"])) {
 	
 	// Logout Button
 	echo '
-	<form action="" method="post"><br />
+	<form action="index.php" method="post"><br />
 		<input name="logout" type="submit" id="logout" value="Logout" />
 	</form>';
 	
@@ -69,7 +69,7 @@ if(isset($_SESSION["userid"])) {
 } else {
 
 	echo '
-	<form action="" method="post">
+	<form action="photostream.php" method="post">
 		<table width="200" border="0" cellpadding="0" cellspacing="0">
 		  <tr>
 			<td width="144"><p class="art-box-body art-blockcontent-body"><strong>Login</strong></p></td>
