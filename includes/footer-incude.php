@@ -6,7 +6,7 @@
             <div class="art-footer">
                 <div class="art-footer-body">
 					<div class="art-footer-text">
-						<p>© Copyright by Adrian Sameli</p>
+						<p>© Copyright by Adrian Sameli / Fabio Colbrelli</p>
                     </div>
                     <div class="cleared"></div>
                 </div>

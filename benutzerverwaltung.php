@@ -39,7 +39,7 @@ if($_SESSION["groupid"] == 1)
 
 		mysql_query($sql) or die(mysql_error());
 		
-		echo 'Lösche '.$_POST["userid"].'<br />';
+		// echo 'Lösche '.$_POST["userid"].'<br />';
 	}
 	
 	$sql = "SELECT u.UserID, u.Name, u.Vorname, u.Titel, u.Mail, u.Password, u.GroupID, u.Geburtsdatum, u.Showname

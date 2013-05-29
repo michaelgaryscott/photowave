@@ -93,9 +93,16 @@ if(isset($_POST))
         For demo, we are going to output results on browser.
         */
         echo '<table width="100%" border="0" cellpadding="4" cellspacing="0">';
-        echo '<tr>';
-        echo '<td align="center"><img src="uploads/'.$ThumbPrefix.$NewImageName.'" alt="Thumbnail"></td>';
-        echo '</tr><tr>';
+		echo '<tr>';
+        echo '<td align="center">Dieses Bild wurde erfolgreich hochgeladen, nun sehen ihre Folowers und Profilbesucher dieses Bild.</td>';
+		echo '</tr><tr>';
+		// Button für das laden von Photostream
+		echo '<td align="center"> Zurück zu der ';
+		?>
+		<input type=button onClick='parent.location="./photostream.php"' value='Photostream'>
+		<?php 
+		echo 'Seite.</td>';
+		echo '</tr><tr>';
         echo '<td align="center"><img src="uploads/'.$NewImageName.'" alt="Resized Image"></td>';
         echo '</tr>';
         echo '</table>';

@@ -60,7 +60,7 @@ echo '
       <td><input type="text" name="email" id="email"'.$return_mail.' /></td>
     </tr>
 	<tr>
-      <td><label for="geburtsdatum">geburtsdatum</label></td>
+      <td><label for="geburtsdatum">geburtsdatum (yyyy-mm-dd)</label></td>
       <td><input type="date" name="geburtsdatum" id="geburtsdatum"'.$return_geburtsdatum.' /></td>
     </tr>
 	<tr>

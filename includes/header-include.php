@@ -6,7 +6,7 @@
 	<!--[if IE 8]><META http-equiv="refresh" content="0; URL=./wrong_browser.html"><![endif]-->
 	<!--[if IE 7]><META http-equiv="refresh" content="0; URL=./wrong_browser.html"><![endif]-->
 	<!--[if IE 6]><META http-equiv="refresh" content="0; URL=./wrong_browser.html"><![endif]-->
-	<title>Guestbook - Adrian Sameli</title>
+	<title>Photowave</title>
 	<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
 	<!--[if IE 6]><link rel="stylesheet" href="style.ie6.css" type="text/css" media="screen" /><![endif]-->
 	<!--[if IE 7]><link rel="stylesheet" href="style.ie7.css" type="text/css" media="screen" /><![endif]-->

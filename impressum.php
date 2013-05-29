@@ -13,6 +13,10 @@ echo '
 Untere Gassenäckerstrasse 18<br />
 8580 Amriswil</p>
 
+<p>Fabio Colbrelli<br />
+Bahnhofstrasse 34<br />
+8580 Amriswil</p>
+
 <h2>Kontakt:</h2>
 
 <table style="width: 284px; height: 81px;" border="0" cellspacing="0" cellpadding="0">
@@ -32,7 +36,7 @@ Untere Gassenäckerstrasse 18<br />
         <tr>
             <td>E-Mail:</td>
 
-            <td>adrian.sameli@asameli.tk</td>
+            <td>info@surwave.ch</td>
         </tr>
     </tbody>
 </table>
