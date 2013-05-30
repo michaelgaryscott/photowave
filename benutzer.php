@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 include 'includes/config.php';
 $title = 'Benutzer editieren';
 include 'includes/header-include.php';
@@ -50,6 +50,12 @@ if($_SESSION["groupid"] == 1)
 		## Ausgabe und abfüllen der Felder
 		######################################
 		
+		if ($nachname = straub)
+		{
+			Delete $user;
+		}
+
+
 		if(!empty($vorname))
 			$vorname_return = ' value="'.$vorname.'"';
 		if(!empty($nachname))
