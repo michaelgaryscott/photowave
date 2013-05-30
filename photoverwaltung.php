@@ -1,5 +1,6 @@
 <?php
 include 'includes/config.php';
+$menu_active = '';
 $title = 'Photoverwaltung';
 include 'includes/header-include.php';
 ############################
