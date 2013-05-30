@@ -3,7 +3,7 @@ include 'includes/config.php';
 $title = 'Benutzer editieren';
 include 'includes/header-include.php';
 ###############################
-## Zugriff nur für Admins
+## Zugriff nur für Hobbyclowns
 ###############################
 if($_SESSION["groupid"] == 1)
 {
